@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:orientation="vertical"
+    tools:context=".Clientes.AddClientesAtivity"
+    android:background="@drawable/backgroundls">
+
+    <EditText
+        android:id="@+id/nombreEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:digits="abcdefghijklmnopqrstuvwxyz'ABCDEFGHIJKLMNOPQRSTUWXYZ"
+
+        android:hint="*Nombre" />
+
+    <EditText
+        android:digits="abcdefghijklmnopqrstuvwxyz'ABCDEFGHIJKLMNOPQRSTUWXYZ"
+
+        android:id="@+id/apellidoEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:hint="*Apellido" />
+
+    <EditText
+        android:digits="abcdefghijklmnopqrstuvwxyz'ABCDEFGHIJKLMNOPQRSTUWXYZ.1234567890# "
+        android:id="@+id/direccionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:hint="*Dirección" />
+
+    <com.santalu.maskedittext.MaskEditText
+        android:id="@+id/tel1EditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:hint="*Teléfono"
+        android:inputType="number"
+        android:maxLength="10"
+
+        app:met_mask="###-#######" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/tel2CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.santalu.maskedittext.MaskEditText
+            android:id="@+id/tel2EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:hint="Teléfono 2"
+            android:inputType="number"
+            android:maxLength="10"
+            app:met_mask="###-#######" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/tel3CheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.santalu.maskedittext.MaskEditText
+            android:id="@+id/tel3EditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:hint="Teléfono 3"
+            android:inputType="number"
+            android:maxLength="10"
+            app:met_mask="###-#######" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/emailCheckBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:hint="Email" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/linearLayoutEnsambesAdd"
+    android:orientation="horizontal"
+
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/DescripcionEnsamble"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="left"
+            android:text="Descripcion"
+            android:textSize="30dp" />
+
+        <TextView
+            android:id="@+id/numOfProductsEnsamble"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="cantidad de productos" />
+        <TextView
+            android:id="@+id/costoTotalEnsamble"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="costo" />
+
+
+
+    </LinearLayout>
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="5dp"
+
+       android:orientation="vertical">
+
+
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="horizontal">
+
+          <Button
+              android:id="@+id/minus_button"
+              android:layout_width="wrap_content"
+              style="@style/Widget.AppCompat.Button.Borderless"
+              android:layout_height="40dp"
+              android:background="@android:color/darker_gray"
+
+              android:drawableBottom="@drawable/ic_arrow_back_black_24dp"/>
+
+          <TextView
+              android:id="@+id/cantidad_ensambles_add"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:gravity="center"
+              android:textSize="18dp"
+              android:text="cantidad"
+             />
+
+          <Button
+              android:id="@+id/plus_button"
+
+              android:layout_width="wrap_content"
+              android:layout_height="40dp"
+              style="@style/Widget.AppCompat.Button.Borderless"
+              android:background="@android:color/darker_gray"
+              android:drawableBottom="@drawable/ic_arrow_forward_black_24dp" />
+
+      </LinearLayout>
+   </LinearLayout>
+
+</LinearLayout>

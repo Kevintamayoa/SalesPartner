@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroundls"
+    android:orientation="vertical"
+    tools:context=".Ordenes.OrdenesActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:id="@+id/SpinnerporEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+            </Spinner>
+
+            <Spinner
+                android:id="@+id/SpinnerporCliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+            </Spinner>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:id="@+id/fechainicial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.santalu.maskedittext.MaskEditText
+                    android:id="@+id/TVfechaInicial"
+                    app:met_mask="##/##/####"
+                    android:inputType="number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="dd/mm/yyyy" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:id="@+id/fechafinal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.santalu.maskedittext.MaskEditText
+                    app:met_mask="##/##/####"
+                    android:id="@+id/TVfechaFinal"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="dd/mm/yyyy" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewOrdenes"
+        app:spanCount="2"
+        android:layout_width="match_parent"
+        app:layoutManager="android.support.v7.widget.GridLayoutManager"
+        android:layout_height="wrap_content">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

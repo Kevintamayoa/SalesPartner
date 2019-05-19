@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".Ordenes.OrdenesActivity"
+    android:background="@drawable/background">
+
+    <Spinner
+        android:id="@+id/SpinnerporEstado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+    </Spinner>
+
+    <Spinner
+        android:id="@+id/SpinnerporCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+    </Spinner>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/fechainicial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.santalu.maskedittext.MaskEditText
+            android:id="@+id/TVfechaInicial"
+            app:met_mask="##/##/####"
+            android:inputType="number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="dd/mm/yyyy" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/fechafinal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.santalu.maskedittext.MaskEditText
+            app:met_mask="##/##/####"
+            android:id="@+id/TVfechaFinal"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="dd/mm/yyyy" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewOrdenes"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

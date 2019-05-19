@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/productosFaltantesImageButton"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:foreground="@drawable/productos_faltantes"
+            android:background="@color/cardview_shadow_end_color" />
+
+        <ImageButton
+            android:id="@+id/simuladorImageButton"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/cardview_shadow_end_color"
+            android:foreground="@drawable/simulador" />
+
+        <ImageButton
+            android:id="@+id/resumenVentasImageButton"
+            android:layout_width="150dp"
+            android:foreground="@drawable/resumen_de_ventas"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/cardview_shadow_end_color" />
+
+    </LinearLayout>
+
+</LinearLayout>

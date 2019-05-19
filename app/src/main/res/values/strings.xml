@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Sales_Partner</string>
+    <string name="title_activity_productos">ProductosActivity</string>
+    <string name="title_activity_ensambles">EnsamblesActivity</string>
+    <string name="title_activity_clientes">ClientesActivity</string>
+    <string name="title_activity_ordenes">OrdenesActivity</string>
+    <string name="title_activity_reportes">ReportesActivity</string>
+</resources>
