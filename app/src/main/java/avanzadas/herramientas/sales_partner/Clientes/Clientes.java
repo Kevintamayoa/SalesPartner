@@ -34,8 +34,40 @@ public class Clientes implements Serializable {
     @ColumnInfo(name = "e_mail")
     private String email;
 
+    @ColumnInfo(name = "user")
+    private String user;
 
-    public Clientes(int id, String first_name, String last_name, String direccion, String phone1, String phone2, String phone3, String email) {
+    @ColumnInfo(name = "clave")
+    private String clave;
+
+    @ColumnInfo(name = "online")
+    private Integer online;
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+    public Integer getOnline() {
+        return online;
+    }
+
+    public void setOnline(Integer online) {
+        this.online = online;
+    }
+
+    public Clientes(int id, String first_name, String last_name, String direccion, String phone1, String phone2, String phone3, String email, String user, String clave, Integer online) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -44,6 +76,9 @@ public class Clientes implements Serializable {
         this.phone2 = phone2;
         this.phone3 = phone3;
         this.email = email;
+        this.user = user;
+        this.clave = clave;
+        this.online = online;
     }
 
     public int getId() {

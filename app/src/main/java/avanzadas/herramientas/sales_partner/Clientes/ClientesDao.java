@@ -30,7 +30,11 @@ public interface ClientesDao {
     @Query("Select * from  customers  Order By last_name DESC;")
     public List<Clientes> getAllClientes();
 
+    @Query("Update customers SET online= 1 where id=:id;")
+    public void ChangeOnline(int id);
 
+    @Query("Update customers SET online= 0 where id=:id;")
+    public void ChangeOnlineOut(int id);
 
     @Query("Select * from customers where id=:id")
     public Clientes getClienteById(int id);
@@ -57,6 +61,8 @@ public interface ClientesDao {
     @Query("select * from customers where address like :dir;")
     public List<Clientes> getAllClientesByDir(String dir);
 
+    @Query("Select * from  customers  where user=:user")
+    public Clientes GetClienteByUser(String user);
 
     @RawQuery(observedEntities = Clientes.class)
     List<Clientes> getAllClientesFindDinamyc(SupportSQLiteQuery query);

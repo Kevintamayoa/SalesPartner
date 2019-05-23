@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/productosImageButton"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@color/cardview_shadow_end_color"
+                android:foreground="@drawable/productos" />
+
+            <ImageButton
+                android:id="@+id/ensamblesImageButton"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/cardview_shadow_end_color"
+                android:foreground="@drawable/ensambles" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/clientesImageButton"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@color/cardview_shadow_end_color"
+                android:foreground="@drawable/clientes" />
+
+            <ImageButton
+                android:id="@+id/ordenesImageButton"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/cardview_shadow_end_color"
+                android:foreground="@drawable/ordenes" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/reportesImageButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/cardview_shadow_end_color"
+        android:foreground="@drawable/reportes" />
+
+</LinearLayout>

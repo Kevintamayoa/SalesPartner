@@ -23,6 +23,9 @@ import avanzadas.herramientas.sales_partner.R;
 public class AddClientesAtivity extends AppCompatActivity {
 
     private EditText nombreEditText;
+    private EditText nombreUsuario;
+    private EditText claveUsuario;
+
     private EditText apellidoEditText;
     private EditText direccionEditText;
     private MaskEditText tel1EditText;
@@ -33,6 +36,8 @@ public class AddClientesAtivity extends AppCompatActivity {
     private CheckBox tel3CheckBox;
     private CheckBox emailCheckBox;
 
+    private String user;
+    private String clave;
     private String f_name;
     private String l_name;
     private String dir;
@@ -190,7 +195,7 @@ public class AddClientesAtivity extends AppCompatActivity {
 
             saveData();
 
-            c = new Clientes(clientesList.size() + 1, f_name, l_name, dir, tel1, tel2, tel3, email);
+            c = new Clientes(clientesList.size() + 1, f_name, l_name, dir, tel1, tel2, tel3, email, user, clave, 0);
 
             clientesDao.InsertClientes(c);
 
@@ -213,6 +218,8 @@ public class AddClientesAtivity extends AppCompatActivity {
         tel2 = tel2EditText.getText().toString();
         tel3 = tel2EditText.getText().toString();
         email = emailEditText.getText().toString();
+        user= nombreUsuario.getText().toString();
+        clave= claveUsuario.getText().toString();
 
 
     }
@@ -303,5 +310,7 @@ public class AddClientesAtivity extends AppCompatActivity {
         tel3CheckBox = findViewById(R.id.tel3CheckBox);
         emailEditText = findViewById(R.id.emailEditText);
         emailCheckBox = findViewById(R.id.emailCheckBox);
+        nombreUsuario= findViewById(R.id.userName);
+        claveUsuario= findViewById(R.id.claveUsuario);
     }
 }
