@@ -195,7 +195,7 @@ public class AddClientesAtivity extends AppCompatActivity {
 
             saveData();
 
-            c = new Clientes(clientesList.size() + 1, f_name, l_name, dir, tel1, tel2, tel3, email, user, clave, 0);
+            c = new Clientes(clientesList.size() + 1, f_name, l_name, dir, tel1, tel2, tel3, email);
 
             clientesDao.InsertClientes(c);
 
@@ -310,7 +310,6 @@ public class AddClientesAtivity extends AppCompatActivity {
         tel3CheckBox = findViewById(R.id.tel3CheckBox);
         emailEditText = findViewById(R.id.emailEditText);
         emailCheckBox = findViewById(R.id.emailCheckBox);
-        nombreUsuario= findViewById(R.id.userName);
-        claveUsuario= findViewById(R.id.claveUsuario);
+
     }
 }

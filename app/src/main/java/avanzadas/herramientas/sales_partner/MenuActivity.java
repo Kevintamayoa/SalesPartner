@@ -31,6 +31,8 @@ import avanzadas.herramientas.sales_partner.Ensambles.EnsamblesActivity;
 import avanzadas.herramientas.sales_partner.Ordenes.OrdenesActivity;
 import avanzadas.herramientas.sales_partner.Productos.ProductosActivity;
 import avanzadas.herramientas.sales_partner.Reportes.ReportesActivity;
+import avanzadas.herramientas.sales_partner.Vendedores.Vendedores;
+import avanzadas.herramientas.sales_partner.Vendedores.vendedoresDao;
 
 public class MenuActivity extends AppCompatActivity{
 
@@ -43,7 +45,7 @@ public class MenuActivity extends AppCompatActivity{
     private ImageButton reportesImageButton;
     private LinearLayout linearActivity;
     private final int requestcode=11;
-    private Clientes cliente;
+    private Vendedores vendedor;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -76,8 +78,8 @@ public class MenuActivity extends AppCompatActivity{
         getSupportActionBar().setIcon(R.mipmap.icono2_round);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         Intent intent= getIntent();
-        cliente= (Clientes) intent.getSerializableExtra("cliente");
-        getSupportActionBar().setTitle(cliente.getFirst_name() + " "+ cliente.getLast_name());
+        vendedor= (Vendedores) intent.getSerializableExtra("vendedor");
+        getSupportActionBar().setTitle(vendedor.getFirst_name() + " "+ vendedor.getLast_name());
 
 
 
@@ -199,8 +201,8 @@ public class MenuActivity extends AppCompatActivity{
         if (id == R.id.logoutButton) {
             //Toast.makeText(this, "Funciona", Toast.LENGTH_SHORT).show();
             AppDataBase db = AppDataBase.getAppDataBase(getApplicationContext());
-            ClientesDao clientesDao= db.clientesDao();
-            clientesDao.ChangeOnlineOut(cliente.getId());
+            vendedoresDao vendedoresDao= db.vendedoresDao();
+            vendedoresDao.ChangeLogout(vendedor.getId());
             restartApp();
             return true;
         }

@@ -15,10 +15,12 @@ import android.widget.EditText;
 
 import avanzadas.herramientas.sales_partner.Clientes.Clientes;
 import avanzadas.herramientas.sales_partner.Clientes.ClientesDao;
+import avanzadas.herramientas.sales_partner.Vendedores.Vendedores;
+import avanzadas.herramientas.sales_partner.Vendedores.vendedoresDao;
 
 public class LoginActivity extends AppCompatActivity {
 
-    ClientesDao clientesDao;
+    vendedoresDao vendedoresDao;
     private EditText user;
     private EditText clave;
     @Override
@@ -28,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Sales Partner");
 
         AppDataBase db = AppDataBase.getAppDataBase(getApplicationContext());
-        clientesDao = db.clientesDao();
+        vendedoresDao = db.vendedoresDao();
         user= findViewById(R.id.usuarioLogin);
         clave= findViewById(R.id.claveLogin);
 
@@ -52,12 +54,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public Clientes Login(String usuarioText){
-        Clientes cl;
-        if(clientesDao.GetClienteByUser(usuarioText)!=null){
-            cl= clientesDao.GetClienteByUser(usuarioText);
+        Vendedores cl;
+        if(vendedoresDao.GetClienteByUser(usuarioText)!=null){
+            cl= vendedoresDao.GetClienteByUser(usuarioText);
 
             if(cl.getClave().equalsIgnoreCase(clave.getText().toString())){
-                clientesDao.ChangeOnline(cl.getId());
+                vendedoresDao.ChangeLogin(cl.getId());
                 restartApp();
             }
             else{

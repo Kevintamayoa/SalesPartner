@@ -20,12 +20,14 @@ import avanzadas.herramientas.sales_partner.Clientes.Clientes;
 import avanzadas.herramientas.sales_partner.Clientes.ClientesDao;
 import avanzadas.herramientas.sales_partner.Productos.ProductosActivity;
 import avanzadas.herramientas.sales_partner.Productos.ProductosDao;
+import avanzadas.herramientas.sales_partner.Vendedores.Vendedores;
+import avanzadas.herramientas.sales_partner.Vendedores.vendedoresDao;
 
 
 public class MainActivity extends AppCompatActivity{
 
 
-    ClientesDao clientesDao;
+    vendedoresDao vendedoresDao;
 
 
 
@@ -37,23 +39,23 @@ public class MainActivity extends AppCompatActivity{
 
         Stetho.initializeWithDefaults(this);
         AppDataBase db = AppDataBase.getAppDataBase(getApplicationContext());
-        clientesDao = db.clientesDao();
-       Clientes clienteOnline= null;
-        List<Clientes> clinetes= clientesDao.getAllClientes();
-        for(Clientes c: clinetes){
-          if(c.getOnline()==1){
-              clienteOnline= c;
+        vendedoresDao = db.vendedoresDao();
+       Vendedores vendedor= null;
+        List<Vendedores> vendedoresList= vendedoresDao.getAllVendedores();
+        for(Vendedores v: vendedoresList){
+          if(v.getOnline()==1){
+              vendedor= v;
           }
 
         }
-        if(clienteOnline==null){
+        if(vendedor==null){
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             super.finish();
         }
         else{
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-            intent.putExtra("cliente", clienteOnline);
+            intent.putExtra("vendedor", vendedor);
             startActivity(intent);
 
             super.finish();
