@@ -22,11 +22,14 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,17 +82,12 @@ public class ProductosActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, response.toString());
-
                         try {
-                            // Parsing json array response
-                            // loop through each json object
-
                             for (int i = 0; i < response.length(); i++) {
 
                                 JSONObject person = (JSONObject) response.get(i);
 
                                 int id = person.getInt("id");
-
                                 int cat = person.getInt("category_id");
                                 String desc = person.getString("description");
                                 int price = person.getInt("price");
@@ -120,22 +118,21 @@ public class ProductosActivity extends AppCompatActivity {
 
 
 }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productos);
         findView();
-      db = AppDataBase.getAppDataBase(getApplicationContext());
-makeJsonArrayRequest();
+        db = AppDataBase.getAppDataBase(getApplicationContext());
 
-
+        makeJsonArrayRequest();
         getSupportActionBar().setTitle("Productos");
         //Toast.makeText(this, productos.get(0).de, Toast.LENGTH_SHORT).show();
 
         model = ViewModelProviders.of(ProductosActivity.this).get(ViewModelProducts.class);
         productosDao = db.productosDao();
-        //List<Productos> productosList = productosDao.getAllProductos();
-        ProductsCategoryDao productsCategoryDao = db.productsCategoryDao();
+         ProductsCategoryDao productsCategoryDao = db.productsCategoryDao();
         productCategories = productsCategoryDao.getAllCategory();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -50,7 +50,7 @@ public class ServerConect {
                         JSONObject jsonObject = response.getJSONObject(i);
 
                         Integer id=jsonObject.getInt("id");
-                        String description= jsonObject.getString("descrption");
+                        String description= jsonObject.getString("description");
                         Integer category_id=jsonObject.getInt("category_id");
                         Integer price=jsonObject.getInt("price");
                         Integer qty=jsonObject.getInt("qty");
