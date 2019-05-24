@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,12 +31,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.santalu.maskedittext.MaskEditText;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import avanzadas.herramientas.sales_partner.AppController;
 import avanzadas.herramientas.sales_partner.AppDataBase;
 import avanzadas.herramientas.sales_partner.Clientes.AddClientesAtivity;
 import avanzadas.herramientas.sales_partner.Clientes.Clientes;
@@ -43,6 +53,7 @@ import avanzadas.herramientas.sales_partner.Clientes.ClientesActivity;
 import avanzadas.herramientas.sales_partner.Clientes.ClientesAdapter;
 import avanzadas.herramientas.sales_partner.Clientes.ClientesDao;
 import avanzadas.herramientas.sales_partner.Ensambles.Ensambles;
+import avanzadas.herramientas.sales_partner.MainActivity;
 import avanzadas.herramientas.sales_partner.MyAdapter;
 import avanzadas.herramientas.sales_partner.Productos.ProductAdapter;
 import avanzadas.herramientas.sales_partner.Productos.Productos;
@@ -58,6 +69,9 @@ public class OrdenesActivity extends AppCompatActivity {
     private CheckBox fechafinal;
     private Calendar calendar;
     public List<Ordenes> ordenesfinal = new ArrayList<>();
+    private String urlOrdenesAssemblies = "http://192.168.43.235:3000/orderassemblies";
+    private String urlOrdenes = "http://192.168.43.235:3000/orders";
+    private static String TAG = OrdenesActivity.class.getSimpleName();
 
     private MaskEditText TvfechaInicial;
     private MaskEditText TvfechaFinal;
@@ -177,6 +191,13 @@ public class OrdenesActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AgregarNuevaOrdenActivity.class);
             startActivityForResult(intent, RequestAdd);
         } else if (id == R.id.BuscarButton) {
+            OrdenesDao ordenesDao=db.orderDao();
+            OrdenesEnsamblesDao ordenesEnsambles= db.ordenesensamblesDao();
+
+
+
+            makeJsonArrayRequestOrders(ordenesDao.getAllOrdenes());
+            makeJsonArrayRequestOrdersAssembly(ordenesEnsambles.getAllOrdenesEnsambles());
             ordenesfinal= new ArrayList<>();
             busquedaRecyclerView();
         }
@@ -467,6 +488,112 @@ public class OrdenesActivity extends AppCompatActivity {
         dialog.show();
     }
 
+
+    private void makeJsonArrayRequestOrdersAssembly(final List<OrdenesEnsambles> locales) {
+        JsonArrayRequest req = new JsonArrayRequest(urlOrdenesAssemblies,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        List<OrdenesEnsambles> ordenesEnsambles= new ArrayList<>();
+                        Log.d(TAG, response.toString());
+                        try {
+                            OrdenesEnsamblesDao Dao = db.ordenesensamblesDao();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject person = (JSONObject) response.get(i);
+                                int a = person.getInt("a");
+                                int id = person.getInt("id");
+                                int id1 = person.getInt("assembly_id");
+                                int id2 = person.getInt("qty");
+
+                                ordenesEnsambles.add(new OrdenesEnsambles(a,id,id1,id2));
+
+                            }
+                            if(ordenesEnsambles!=Dao.getAllOrdenesEnsambles()){
+                                for(OrdenesEnsambles c: Dao.getAllOrdenesEnsambles()){
+                                    Dao.DeleatEnsamble(c);
+                                }
+                                for(OrdenesEnsambles c:ordenesEnsambles){
+                                    Dao.InsertOrdenesEnsamble(c);
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(req);
+
+
+    }
+    private void makeJsonArrayRequestOrders(final List<Ordenes> locales) {
+        JsonArrayRequest req = new JsonArrayRequest(urlOrdenes,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        List<Ordenes> ordenes= new ArrayList<>();
+                        Log.d(TAG, response.toString());
+                        try {
+                            OrdenesDao Dao = db.orderDao();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject person = (JSONObject) response.get(i);
+                                int id = person.getInt("id");
+                                int id1 = person.getInt("status_id");
+                                int id2 = person.getInt("customer_id");
+                                String id3 = person.getString("date");
+                                String id4 = person.getString("change_log");
+
+
+                                ordenes.add(new Ordenes(id,id1,id2,id3,id4));
+
+                                // locales.remove(new Ordenes(id,id1,id2,id3,id4));
+
+                            }
+                            if(ordenes!=Dao.getAllOrdenes()){
+                                for(Ordenes c: Dao.getAllOrdenes()){
+                                    Dao.DeleteOrden(c);
+                                }
+                                for(Ordenes c:ordenes){
+                                    Dao.InsrtOrdenes(c);
+                                }
+                            }
+                            //for(Ordenes obj :locales){
+                            //    Dao.DeleteOrden(obj);
+                            //}
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(req);
+
+
+    }
    // @Override
    // protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
    //     if(requestCode==RequestAdd){

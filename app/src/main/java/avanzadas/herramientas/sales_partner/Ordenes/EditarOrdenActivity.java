@@ -40,19 +40,29 @@ public class EditarOrdenActivity extends AppCompatActivity {
     View view;
     AdapterEditOrdenes.ViewHolder viewHolder;
     ViewModelEditOrden model;
-
+    List<Ensambles> ensambleParaEliminar;
+    List<Ensambles> ensamblesParaGuardar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_orden);
 
-
+        ensambleParaEliminar= new ArrayList<>();
+        ensamblesParaGuardar= new ArrayList<>();
         db = AppDataBase.getAppDataBase(getApplicationContext());
         model = ViewModelProviders.of(EditarOrdenActivity.this).get(ViewModelEditOrden.class);
+
+        if(model.getEnsamblesParaEliminar()!=null){
+            ensambleParaEliminar= model.getEnsamblesParaEliminar();
+        }
+        if(model.getEnsamblesParaGuardar()!=null){
+            ensamblesParaGuardar= model.getEnsamblesParaGuardar();
+        }
         FindView();
         clienteTV.setText(cliente.getFirst_name()+" "+cliente.getLast_name());
         RecyclerView();
+
     }
 
     @Override
@@ -73,7 +83,7 @@ public class EditarOrdenActivity extends AppCompatActivity {
                                 ensamblesList.get(item.getGroupId()).getId());
 
                         ensamblesList.remove(ensamblesList.get(item.getGroupId()));
-
+                    ensambleParaEliminar.add(ensamblesList.get(item.getGroupId()));
                        adapterEditOrdenes=new AdapterEditOrdenes(ensamblesList, orden);
                        recyclerView.setAdapter(adapterEditOrdenes);
 
@@ -170,6 +180,7 @@ public class EditarOrdenActivity extends AppCompatActivity {
 
 
                 ensamblesList.add(db.ensamblesDao().getEnsamblesByID(resultCode));
+                ensamblesParaGuardar.add(db.ensamblesDao().getEnsamblesByID(resultCode));
                 model.setEnsamblesList(ensamblesList);
                 adapterEditOrdenes = new AdapterEditOrdenes(ensamblesList, orden);
                 recyclerView.setAdapter(adapterEditOrdenes);
