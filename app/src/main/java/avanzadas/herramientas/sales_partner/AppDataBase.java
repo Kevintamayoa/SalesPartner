@@ -44,14 +44,14 @@ public abstract class AppDataBase extends RoomDatabase {
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
 
-                                db.execSQL("INSERT INTO product_categories (id, description) VALUES (0, 'Disco duro');");
-                                db.execSQL("INSERT INTO product_categories (id, description) VALUES (1, 'Memoria');");
-                                db.execSQL("INSERT INTO product_categories (id, description) VALUES (2, 'Monitor');");
-                                db.execSQL("INSERT INTO product_categories (id, description) VALUES (3, 'Procesador');");
-                                db.execSQL("INSERT INTO product_categories (id, description) VALUES (4, 'Tarjeta madre');");
-                                db.execSQL("INSERT INTO product_categories (id, description) VALUES (5, 'Tarjeta de video');");
-                                db.execSQL("INSERT INTO product_categories (id, description) VALUES (6, 'Tarjeta de sonido');");
-                                db.execSQL("INSERT INTO product_categories (id, description) VALUES (7, 'Tarjeta');");
+                               db.execSQL("INSERT INTO product_categories (id, description) VALUES (0, 'Disco duro');");
+                               db.execSQL("INSERT INTO product_categories (id, description) VALUES (1, 'Memoria');");
+                               db.execSQL("INSERT INTO product_categories (id, description) VALUES (2, 'Monitor');");
+                               db.execSQL("INSERT INTO product_categories (id, description) VALUES (3, 'Procesador');");
+                               db.execSQL("INSERT INTO product_categories (id, description) VALUES (4, 'Tarjeta madre');");
+                               db.execSQL("INSERT INTO product_categories (id, description) VALUES (5, 'Tarjeta de video');");
+                               db.execSQL("INSERT INTO product_categories (id, description) VALUES (6, 'Tarjeta de sonido');");
+                               db.execSQL("INSERT INTO product_categories (id, description) VALUES (7, 'Tarjeta');");
 
                                 //db.execSQL("INSERT INTO products (id, category_id, description, price, qty) VALUES (0, 0, 'Western Digital Purple WD10PURX, 3.5, 1TB, SATA3, 6GB/s, 64MB, IntelliPower', 149900, 2);");
                                 //db.execSQL("INSERT INTO products (id, category_id, description, price, qty) VALUES (1, 0, 'Western Digital 3.5 SATA de 320GB a 7200 RPM / New-Pulls / WD3200AAJS / WD3200AAKS',43500, 4);");
@@ -261,12 +261,12 @@ public abstract class AppDataBase extends RoomDatabase {
                                             -- En tránsito: pedido enviado al cliente, en espera de confirmación de recibido
                                             -- Finalizado: estado final de un pedido entregado exitosamente*/
                                     //no carga
-                                 //db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (0, 'Pendiente', 1, '5', '1,2');");
-                                 //db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (1, 'Cancelado', 0, '0', '5');");
-                                 //db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (2, 'Confirmado', 1, '5', '3');");
-                                 //db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (3, 'En tránsito', 0, '5', '4');");
-                                 //db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (4, 'Finalizado', 0, '5', '5');");
-                                 //db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (5, 'a nada', 0, '5', '5');");
+                                 db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (0, 'Pendiente', 1, '5', '1,2');");
+                                 db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (1, 'Cancelado', 0, '0', '5');");
+                                 db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (2, 'Confirmado', 1, '5', '3');");
+                                 db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (3, 'En tránsito', 0, '5', '4');");
+                                 db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (4, 'Finalizado', 0, '5', '5');");
+                                 db.execSQL("INSERT INTO order_status (id, description, editable, previous, next) VALUES (5, 'a nada', 0, '5', '5');");
                            //       //no carga
                            //       db.execSQL("INSERT INTO orders (id, status_id, customer_id, date, change_log) VALUES (0, 4, 5, '05-10-2016', '');");
                            //       db.execSQL("INSERT INTO orders (id, status_id, customer_id, date, change_log) VALUES (1, 4, 2, '12-11-2016', '');");

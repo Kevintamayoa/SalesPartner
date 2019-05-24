@@ -1,6 +1,7 @@
 package avanzadas.herramientas.sales_partner.Ensambles;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
@@ -12,6 +13,8 @@ public interface EnsamblesDao {
     @Insert
     public void InsertEnsamble(Ensambles ensambles);
 
+    @Delete
+    public void DeleteEnsamble(Ensambles ensambles);
 
     @Query("Select * from  assemblies;")
     public List<Ensambles> getAllEnsambles();

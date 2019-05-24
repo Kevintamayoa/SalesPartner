@@ -1,6 +1,7 @@
 package avanzadas.herramientas.sales_partner.Ordenes;
 
 import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
@@ -16,6 +17,9 @@ public interface OrdenesDao {
 
     @Update
     public void UdapteOrdenStatus(Ordenes ordenes);
+
+    @Delete
+    public void DeleteOrden(Ordenes ordenes);
 
     @Query("SELECT * from orders ")
     public List<Ordenes> getAllOrdenes();

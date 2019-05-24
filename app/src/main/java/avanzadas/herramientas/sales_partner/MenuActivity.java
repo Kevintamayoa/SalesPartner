@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,8 +23,16 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.facebook.stetho.Stetho;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.zip.Inflater;
@@ -31,10 +40,21 @@ import java.util.zip.Inflater;
 import avanzadas.herramientas.sales_partner.Clientes.Clientes;
 import avanzadas.herramientas.sales_partner.Clientes.ClientesActivity;
 import avanzadas.herramientas.sales_partner.Clientes.ClientesDao;
+import avanzadas.herramientas.sales_partner.Ensambles.Ensambles;
 import avanzadas.herramientas.sales_partner.Ensambles.EnsamblesActivity;
+import avanzadas.herramientas.sales_partner.Ensambles.EnsamblesDao;
+import avanzadas.herramientas.sales_partner.Ensambles.EnsamblesProducts;
+import avanzadas.herramientas.sales_partner.Ensambles.ProductosEnsamblesDao;
+import avanzadas.herramientas.sales_partner.Ordenes.Ordenes;
 import avanzadas.herramientas.sales_partner.Ordenes.OrdenesActivity;
 import avanzadas.herramientas.sales_partner.Ordenes.OrdenesDao;
+import avanzadas.herramientas.sales_partner.Ordenes.OrdenesEnsambles;
+import avanzadas.herramientas.sales_partner.Ordenes.OrdenesEnsamblesDao;
+import avanzadas.herramientas.sales_partner.Productos.ProductCategory;
+import avanzadas.herramientas.sales_partner.Productos.Productos;
 import avanzadas.herramientas.sales_partner.Productos.ProductosActivity;
+import avanzadas.herramientas.sales_partner.Productos.ProductosDao;
+import avanzadas.herramientas.sales_partner.Productos.ProductsCategoryDao;
 import avanzadas.herramientas.sales_partner.Reportes.ReportesActivity;
 import avanzadas.herramientas.sales_partner.Vendedores.Vendedores;
 import avanzadas.herramientas.sales_partner.Vendedores.vendedoresDao;
@@ -42,7 +62,335 @@ import avanzadas.herramientas.sales_partner.Vendedores.vendedoresDao;
 public class MenuActivity extends AppCompatActivity{
 
     private static final int DURATION_ANIMATION = 380;
+    private static String TAG = MainActivity.class.getSimpleName();
+    private String urlproducts = "http://192.168.0.12:3000/products";
+   // private String urlproductscategorys = "http://192.168.0.12:3000/productcategories";
+    private String urlAssemblies = "http://192.168.0.12:3000/assemblies";
+    private String urlAssembliesProducts = "http://192.168.0.12:3000/assemblyproducts";
+    private String urlOrdenes = "http://192.168.0.12:3000/orders";
+    private String urlOrdenesAssemblies = "http://192.168.0.12:3000/orderassemblies";
+    private String urlClientes = "http://192.168.0.12:3000/customers";
 
+    private static String KEY_SUCCESS = "success";
+    private static String KEY_USERID = "userid";
+    private void makeJsonArrayRequestProductos(final List<Productos> productoslocales) {
+        JsonArrayRequest req = new JsonArrayRequest(urlproducts,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        try {
+                            ProductosDao productosDao = db.productosDao();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject person = (JSONObject) response.get(i);
+                                int id = person.getInt("id");
+                                int cat = person.getInt("category_id");
+                                String desc = person.getString("description");
+                                int price = person.getInt("price");
+                                int qty = person.getInt("qty");
+                                if(!productoslocales.contains(new Productos(id, cat, desc, price, qty))){
+                                    productosDao.insertProductId(new Productos(id, cat, desc, price, qty));
+                                }else{
+                                    productoslocales.remove(new Productos(id, cat, desc, price, qty));
+                                }
+                            }
+                            for(Productos obj :productoslocales){
+                                productosDao.deleteProductId(obj);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(req);
+
+
+    }
+ //   private void makeJsonArrayRequestProductCategories(final List<ProductCategory> locales) {
+ //       JsonArrayRequest req = new JsonArrayRequest(urlproductscategorys,
+ //               new Response.Listener<JSONArray>() {
+ //                   @Override
+ //                   public void onResponse(JSONArray response) {
+ //                       Log.d(TAG, response.toString());
+ //                       try {
+ //                           ProductsCategoryDao Dao = db.productsCategoryDao();
+ //                           for (int i = 0; i < response.length(); i++) {
+ //                               JSONObject person = (JSONObject) response.get(i);
+ //                               int id = person.getInt("id");
+ //                               String desc = person.getString("description");
+ //                               if(!locales.contains(new ProductCategory(id, desc))){
+ //                                   Dao.insertProductCategoryId(new ProductCategory(id, desc));
+ //                               }else{
+ //                                   locales.remove(new ProductCategory(id,  desc));
+ //                               }
+ //                           }
+ //                           for(ProductCategory obj :locales){
+ //                               Dao.DeleteProductCategory(obj);
+ //                           }
+//
+ //                       } catch (JSONException e) {
+ //                           e.printStackTrace();
+ //                           Toast.makeText(getApplicationContext(),
+ //                                   "Error: " + e.getMessage(),
+ //                                   Toast.LENGTH_LONG).show();
+ //                       }
+//
+ //                   }
+ //               }, new Response.ErrorListener() {
+ //           @Override
+ //           public void onErrorResponse(VolleyError error) {
+ //               VolleyLog.d(TAG, "Error: " + error.getMessage());
+ //               Toast.makeText(getApplicationContext(),
+ //                       error.getMessage(), Toast.LENGTH_SHORT).show();
+//
+ //           }
+ //       });
+ //       AppController.getInstance().addToRequestQueue(req);
+//
+//
+ //   }
+    private void makeJsonArrayRequestEnsambles(final List<Ensambles> productoslocales) {
+        JsonArrayRequest req = new JsonArrayRequest(urlAssemblies,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        try {
+                            EnsamblesDao productosDao = db.ensamblesDao();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject person = (JSONObject) response.get(i);
+                                int id = person.getInt("id");
+                                String desc = person.getString("description");
+                                if(!productoslocales.contains(new Ensambles(id, desc))){
+                                    productosDao.InsertEnsamble(new Ensambles(id, desc));
+                                }else{
+                                    productoslocales.remove(new Ensambles(id,  desc));
+                                }
+                            }
+                            for(Ensambles obj :productoslocales){
+                                productosDao.DeleteEnsamble(obj);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(req);
+
+
+    }
+    private void makeJsonArrayRequestEnsamblesProducts(final List<EnsamblesProducts> locales) {
+        JsonArrayRequest req = new JsonArrayRequest(urlAssembliesProducts,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        try {
+                            ProductosEnsamblesDao Dao = db.enamblesProductsDao();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject person = (JSONObject) response.get(i);
+                                int a = person.getInt("a");
+                                int id = person.getInt("id");
+                                int product_id = person.getInt("product_id");
+                                int qty = person.getInt("qty");
+                                if(!locales.contains(new EnsamblesProducts(a,id, product_id,qty))){
+                                    Dao.InsertAssemblyProducts(new EnsamblesProducts(a,id, product_id,qty));
+                                }else{
+                                    locales.remove(new EnsamblesProducts(a,id, product_id,qty));
+                                }
+                            }
+                            for(EnsamblesProducts obj :locales){
+                                Dao.DeleteAssemblyProducts(obj);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(req);
+
+
+    }
+    private void makeJsonArrayRequestClientes(final List<Clientes> locales) {
+        JsonArrayRequest req = new JsonArrayRequest(urlClientes,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        try {
+                            ClientesDao Dao = db.clientesDao();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject person = (JSONObject) response.get(i);
+                                int id = person.getInt("id");
+                                String id1 = person.getString("first_name");
+                                String id2 = person.getString("last_name");
+                                String id3 = person.getString("address");
+                                String id4 = person.getString("phone1");
+                                String id5 = person.getString("phone2");
+                                String id6 = person.getString("phone3");
+                                String id7 = person.getString("e_mail");
+                                if(!locales.contains(new Clientes(id,id1,id2,id3,id4,id5,id6,id7))){
+                                    Dao.InsertClientes(new Clientes(id,id1,id2,id3,id4,id5,id6,id7));
+                                }else{
+                                    locales.remove(new Clientes(id,id1,id2,id3,id4,id5,id6,id7));
+                                }
+                            }
+                            for(Clientes obj :locales){
+                                Dao.DeleteClientes(obj);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(req);
+
+
+    }
+    private void makeJsonArrayRequestOrders(final List<Ordenes> locales) {
+        JsonArrayRequest req = new JsonArrayRequest(urlOrdenes,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        try {
+                            OrdenesDao Dao = db.orderDao();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject person = (JSONObject) response.get(i);
+                                int id = person.getInt("id");
+                                int id1 = person.getInt("status_id");
+                                int id2 = person.getInt("customer_id");
+                                String id3 = person.getString("date");
+                                String id4 = person.getString("change_log");
+
+                                if(!locales.contains(new Ordenes(id,id1,id2,id3,id4))){
+                                    Dao.InsrtOrdenes(new Ordenes(id,id1,id2,id3,id4));
+                                }else{
+                                    locales.remove(new Ordenes(id,id1,id2,id3,id4));
+                                }
+                            }
+                            for(Ordenes obj :locales){
+                                Dao.DeleteOrden(obj);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(req);
+
+
+    }
+    private void makeJsonArrayRequestOrdersAssembly(final List<OrdenesEnsambles> locales) {
+        JsonArrayRequest req = new JsonArrayRequest(urlOrdenesAssemblies,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d(TAG, response.toString());
+                        try {
+                            OrdenesEnsamblesDao Dao = db.ordenesensamblesDao();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject person = (JSONObject) response.get(i);
+                                int a = person.getInt("a");
+                                int id = person.getInt("id");
+                                int id1 = person.getInt("assembly_id");
+                                int id2 = person.getInt("qty");
+                                if(!locales.contains(new OrdenesEnsambles(a,id,id1,id2))){
+                                    Dao.InsertOrdenesEnsamble(new OrdenesEnsambles(a,id,id1,id2));
+                                }else{
+                                    locales.remove(new OrdenesEnsambles(a,id,id1,id2));
+                                }
+                            }
+                            for(OrdenesEnsambles obj :locales){
+                                Dao.DeleatEnsamble(obj);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        AppController.getInstance().addToRequestQueue(req);
+
+
+    }
     private ImageButton productosImageButton;
     private ImageButton ensamblesImageButton;
     private ImageButton clientesImageButton;
@@ -52,7 +400,7 @@ public class MenuActivity extends AppCompatActivity{
     private final int requestcode=11;
     private Vendedores vendedor;
     private OrdenesDao ordenesDao;
-
+    AppDataBase db;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==requestcode&&resultCode==37){
@@ -89,7 +437,34 @@ public class MenuActivity extends AppCompatActivity{
 
 
 
-        AppDataBase db = AppDataBase.getAppDataBase(getApplicationContext());
+         db = AppDataBase.getAppDataBase(getApplicationContext());
+        ProductosDao productosDao = db.productosDao();
+        List<Productos> productoslocales=productosDao.getAllProductos();
+        makeJsonArrayRequestProductos(productoslocales);
+
+     //   ProductsCategoryDao productsCategoryDao = db.productsCategoryDao();
+     //   List<ProductCategory> productCategories=productsCategoryDao.getAllCategory();
+     //   makeJsonArrayRequestProductCategories(productCategories);
+
+        EnsamblesDao ensamblesDao = db.ensamblesDao();
+        List<Ensambles> ensambles=ensamblesDao.getAllEnsambles();
+        makeJsonArrayRequestEnsambles(ensambles);
+
+        ProductosEnsamblesDao productosEnsamblesDao = db.enamblesProductsDao();
+        List<EnsamblesProducts> ensamblesProducts=productosEnsamblesDao.getAllAssemblyProducts();
+        makeJsonArrayRequestEnsamblesProducts(ensamblesProducts);
+
+        ClientesDao clientesDao = db.clientesDao();
+        List<Clientes> clientes=clientesDao.getAllClientes();
+        makeJsonArrayRequestClientes(clientes);
+
+        OrdenesDao ordenesDao = db.orderDao();
+        List<Ordenes> ordeneslocales=ordenesDao.getAllOrdenes();
+        makeJsonArrayRequestOrders(ordeneslocales);
+
+        OrdenesEnsamblesDao ordenesEnsamblesDao = db.ordenesensamblesDao();
+        List<OrdenesEnsambles> ordenesEnsambles=ordenesEnsamblesDao.getAllOrdenesEnsambles();
+        makeJsonArrayRequestOrdersAssembly(ordenesEnsambles);
         ordenesDao = db.orderDao();
         //RequestQueue rq;
         //JsonObjectRequest jor;

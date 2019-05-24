@@ -68,56 +68,8 @@ public class ProductosActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private static String TAG = ProductosActivity.class.getSimpleName();
-    private String url = "http://192.168.0.12:3000/products";
-    private static String KEY_SUCCESS = "success";
-    private static String KEY_USERID = "userid";
+
     AppDataBase db;
-
-    private void makeJsonArrayRequest() {
-
-
-        JsonArrayRequest req = new JsonArrayRequest(url,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, response.toString());
-                        try {
-                            for (int i = 0; i < response.length(); i++) {
-
-                                JSONObject person = (JSONObject) response.get(i);
-
-                                int id = person.getInt("id");
-                                int cat = person.getInt("category_id");
-                                String desc = person.getString("description");
-                                int price = person.getInt("price");
-                                int qty = person.getInt("qty");
-                                ProductosDao productosDao = db.productosDao();
-                                productosDao.insertProductId(new Productos(id, cat, desc, price, qty));
-
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        AppController.getInstance().addToRequestQueue(req);
-
-
-}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +78,6 @@ public class ProductosActivity extends AppCompatActivity {
         findView();
         db = AppDataBase.getAppDataBase(getApplicationContext());
 
-        makeJsonArrayRequest();
         getSupportActionBar().setTitle("Productos");
         //Toast.makeText(this, productos.get(0).de, Toast.LENGTH_SHORT).show();
 
