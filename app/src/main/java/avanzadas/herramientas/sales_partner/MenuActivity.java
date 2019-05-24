@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -63,13 +64,13 @@ public class MenuActivity extends AppCompatActivity{
 
     private static final int DURATION_ANIMATION = 380;
     private static String TAG = MainActivity.class.getSimpleName();
-    private String urlproducts = "http://192.168.0.12:3000/products";
+    private String urlproducts = "http://192.168.43.235:3000/products";
    // private String urlproductscategorys = "http://192.168.0.12:3000/productcategories";
-    private String urlAssemblies = "http://192.168.0.12:3000/assemblies";
-    private String urlAssembliesProducts = "http://192.168.0.12:3000/assemblyproducts";
-    private String urlOrdenes = "http://192.168.0.12:3000/orders";
-    private String urlOrdenesAssemblies = "http://192.168.0.12:3000/orderassemblies";
-    private String urlClientes = "http://192.168.0.12:3000/customers";
+    private String urlAssemblies = "http://192.168.43.235:3000/assemblies";
+    private String urlAssembliesProducts = "http://192.168.43.235:3000/assemblyproducts";
+    private String urlOrdenes = "http://192.168.43.235:3000/orders";
+    private String urlOrdenesAssemblies = "http://192.168.43.235:3000/orderassemblies";
+    private String urlClientes = "http://192.168.43.235:3000/customers";
 
     private static String KEY_SUCCESS = "success";
     private static String KEY_USERID = "userid";
@@ -81,6 +82,7 @@ public class MenuActivity extends AppCompatActivity{
                         Log.d(TAG, response.toString());
                         try {
                             ProductosDao productosDao = db.productosDao();
+                            if(productosDao.getAllProductos()==null){
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject person = (JSONObject) response.get(i);
                                 int id = person.getInt("id");
@@ -88,15 +90,15 @@ public class MenuActivity extends AppCompatActivity{
                                 String desc = person.getString("description");
                                 int price = person.getInt("price");
                                 int qty = person.getInt("qty");
-                                if(!productoslocales.contains(new Productos(id, cat, desc, price, qty))){
+
                                     productosDao.insertProductId(new Productos(id, cat, desc, price, qty));
-                                }else{
-                                    productoslocales.remove(new Productos(id, cat, desc, price, qty));
-                                }
+
+                                    //productoslocales.remove(new Productos(id, cat, desc, price, qty));
+
                             }
                             for(Productos obj :productoslocales){
                                 productosDao.deleteProductId(obj);
-                            }
+                            }}
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -162,28 +164,29 @@ public class MenuActivity extends AppCompatActivity{
 //
 //
  //   }
-    private void makeJsonArrayRequestEnsambles(final List<Ensambles> productoslocales) {
+    private void makeJsonArrayRequestEnsambles(final List<Ensambles> ensambleslocales) {
         JsonArrayRequest req = new JsonArrayRequest(urlAssemblies,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG, response.toString());
                         try {
-                            EnsamblesDao productosDao = db.ensamblesDao();
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject person = (JSONObject) response.get(i);
-                                int id = person.getInt("id");
-                                String desc = person.getString("description");
-                                if(!productoslocales.contains(new Ensambles(id, desc))){
-                                    productosDao.InsertEnsamble(new Ensambles(id, desc));
-                                }else{
-                                    productoslocales.remove(new Ensambles(id,  desc));
+                            EnsamblesDao ensamblesDao = db.ensamblesDao();
+                            if(ensamblesDao.getAllEnsambles()==null) {
+                                for (int i = 0; i < response.length(); i++) {
+                                    JSONObject person = (JSONObject) response.get(i);
+                                    int id = person.getInt("id");
+                                    String desc = person.getString("description");
+
+                                        ensamblesDao.InsertEnsamble(new Ensambles(id, desc));
+
+                                       // ensambleslocales.remove(new Ensambles(id, desc));
+
+                                }
+                                for (Ensambles obj : ensambleslocales) {
+                                    ensamblesDao.DeleteEnsamble(obj);
                                 }
                             }
-                            for(Ensambles obj :productoslocales){
-                                productosDao.DeleteEnsamble(obj);
-                            }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(),
@@ -213,22 +216,23 @@ public class MenuActivity extends AppCompatActivity{
                         Log.d(TAG, response.toString());
                         try {
                             ProductosEnsamblesDao Dao = db.enamblesProductsDao();
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject person = (JSONObject) response.get(i);
-                                int a = person.getInt("a");
-                                int id = person.getInt("id");
-                                int product_id = person.getInt("product_id");
-                                int qty = person.getInt("qty");
-                                if(!locales.contains(new EnsamblesProducts(a,id, product_id,qty))){
-                                    Dao.InsertAssemblyProducts(new EnsamblesProducts(a,id, product_id,qty));
-                                }else{
-                                    locales.remove(new EnsamblesProducts(a,id, product_id,qty));
+                            if(Dao.getAllAssemblyProducts()==null) {
+                                for (int i = 0; i < response.length(); i++) {
+                                    JSONObject person = (JSONObject) response.get(i);
+                                    int a = person.getInt("a");
+                                    int id = person.getInt("id");
+                                    int product_id = person.getInt("product_id");
+                                    int qty = person.getInt("qty");
+
+                                        Dao.InsertAssemblyProducts(new EnsamblesProducts(a, id, product_id, qty));
+
+                                       // locales.remove(new EnsamblesProducts(a, id, product_id, qty));
+
+                                }
+                                for (EnsamblesProducts obj : locales) {
+                                    Dao.DeleteAssemblyProducts(obj);
                                 }
                             }
-                            for(EnsamblesProducts obj :locales){
-                                Dao.DeleteAssemblyProducts(obj);
-                            }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(),
@@ -255,6 +259,7 @@ public class MenuActivity extends AppCompatActivity{
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        List<Clientes> clientes= new ArrayList<>();
                         Log.d(TAG, response.toString());
                         try {
                             ClientesDao Dao = db.clientesDao();
@@ -268,15 +273,22 @@ public class MenuActivity extends AppCompatActivity{
                                 String id5 = person.getString("phone2");
                                 String id6 = person.getString("phone3");
                                 String id7 = person.getString("e_mail");
-                                if(!locales.contains(new Clientes(id,id1,id2,id3,id4,id5,id6,id7))){
-                                    Dao.InsertClientes(new Clientes(id,id1,id2,id3,id4,id5,id6,id7));
-                                }else{
-                                    locales.remove(new Clientes(id,id1,id2,id3,id4,id5,id6,id7));
+
+                                    clientes.add(new Clientes(id,id1,id2,id3,id4,id5,id6,id7));
+                                    //Dao.InsertClientes(new Clientes(id,id1,id2,id3,id4,id5,id6,id7));
+
+                            }
+                            if(clientes!=Dao.getAllClientes()){
+                                for(Clientes c: Dao.getAllClientes()){
+                                    Dao.DeleteClientes(c);
+                                }
+                                for(Clientes c:clientes){
+                                    Dao.InsertClientes(c);
                                 }
                             }
-                            for(Clientes obj :locales){
-                                Dao.DeleteClientes(obj);
-                            }
+                           // for(Clientes obj :locales){
+                           //     Dao.DeleteClientes(obj);
+                           // }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -304,6 +316,7 @@ public class MenuActivity extends AppCompatActivity{
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        List<Ordenes> ordenes= new ArrayList<>();
                         Log.d(TAG, response.toString());
                         try {
                             OrdenesDao Dao = db.orderDao();
@@ -315,15 +328,23 @@ public class MenuActivity extends AppCompatActivity{
                                 String id3 = person.getString("date");
                                 String id4 = person.getString("change_log");
 
-                                if(!locales.contains(new Ordenes(id,id1,id2,id3,id4))){
-                                    Dao.InsrtOrdenes(new Ordenes(id,id1,id2,id3,id4));
-                                }else{
-                                    locales.remove(new Ordenes(id,id1,id2,id3,id4));
+
+                                    ordenes.add(new Ordenes(id,id1,id2,id3,id4));
+
+                                   // locales.remove(new Ordenes(id,id1,id2,id3,id4));
+
+                            }
+                            if(ordenes!=Dao.getAllOrdenes()){
+                                for(Ordenes c: Dao.getAllOrdenes()){
+                                    Dao.DeleteOrden(c);
+                                }
+                                for(Ordenes c:ordenes){
+                                    Dao.InsrtOrdenes(c);
                                 }
                             }
-                            for(Ordenes obj :locales){
-                                Dao.DeleteOrden(obj);
-                            }
+                            //for(Ordenes obj :locales){
+                            //    Dao.DeleteOrden(obj);
+                            //}
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -351,6 +372,7 @@ public class MenuActivity extends AppCompatActivity{
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
+                        List<OrdenesEnsambles> ordenesEnsambles= new ArrayList<>();
                         Log.d(TAG, response.toString());
                         try {
                             OrdenesEnsamblesDao Dao = db.ordenesensamblesDao();
@@ -360,14 +382,17 @@ public class MenuActivity extends AppCompatActivity{
                                 int id = person.getInt("id");
                                 int id1 = person.getInt("assembly_id");
                                 int id2 = person.getInt("qty");
-                                if(!locales.contains(new OrdenesEnsambles(a,id,id1,id2))){
-                                    Dao.InsertOrdenesEnsamble(new OrdenesEnsambles(a,id,id1,id2));
-                                }else{
-                                    locales.remove(new OrdenesEnsambles(a,id,id1,id2));
-                                }
+
+                                    ordenesEnsambles.add(new OrdenesEnsambles(a,id,id1,id2));
+
                             }
-                            for(OrdenesEnsambles obj :locales){
-                                Dao.DeleatEnsamble(obj);
+                            if(ordenesEnsambles!=Dao.getAllOrdenesEnsambles()){
+                                for(OrdenesEnsambles c: Dao.getAllOrdenesEnsambles()){
+                                    Dao.DeleatEnsamble(c);
+                                }
+                                for(OrdenesEnsambles c:ordenesEnsambles){
+                                    Dao.InsertOrdenesEnsamble(c);
+                                }
                             }
 
                         } catch (JSONException e) {

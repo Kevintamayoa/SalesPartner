@@ -214,7 +214,7 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
         for(int i=0;i<db.ordenesensamblesDao().getAllOrdenesEnsambles().size()+15;i++){
             if(!a.contains(i)){
                 ause.add(i);
-                //ause es la lista de ids que puede tener ordenesAssemblies
+
             }
         }
 
