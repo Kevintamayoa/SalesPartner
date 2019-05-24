@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,11 +21,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import avanzadas.herramientas.sales_partner.AppDataBase;
 import avanzadas.herramientas.sales_partner.Clientes.Clientes;
@@ -205,7 +213,7 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         Date date = new Date();
 
-        String fecha = dateFormat.format(date);
+        final String fecha = dateFormat.format(date);
         List<Integer> a= new ArrayList<>();
         List<Integer> ause= new ArrayList<>();
         for(OrdenesEnsambles oe:db.ordenesensamblesDao().getAllOrdenesEnsambles()){
@@ -220,10 +228,43 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
 
     for(int i=0;i<ensamblesList.size();i++){
 
-        if(i==0){
-            ids=db.orderDao().getAllOrdenesByDate().size();
-            db.orderDao().InsrtOrdenes(new Ordenes(ids,0,spinner.getSelectedItemPosition(),fecha,""));
+        if(i==0) {
+            ids = db.orderDao().getAllOrdenesByDate().size();
+            db.orderDao().InsrtOrdenes(new Ordenes(ids, 0, spinner.getSelectedItemPosition(), fecha, ""));
             //Aqui mando al servidor la orden ^
+
+            String url = "192.168.43.235:3000/orders/add";
+            StringRequest postRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+
+                @Override
+                public void onResponse(String response) {
+                    Log.d("Response", response);
+                }
+            }, new Response.ErrorListener() {
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("Error.response", error.toString());
+                }
+            }){
+
+              @Override
+              protected Map<String, String> getParams(){
+
+                  Map<String, String> params =  new HashMap<String, String>();
+
+                  params.put("id", String.valueOf(ids));
+                  params.put("status_id", "0");
+                  params.put("customer_id", String.valueOf(spinner.getSelectedItemPosition()));
+                  params.put("date", fecha);
+                  params.put("change_log", "");
+
+                  return params;
+              }
+            };
+
+
+
         }
 
         viewHolder=(AdapterAddOrder.ViewHolder)rc.findViewHolderForAdapterPosition(i);
