@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //if()
+
         setContentView(R.layout.activity_main);
 
         Stetho.initializeWithDefaults(this);
