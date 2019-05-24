@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -258,16 +259,31 @@ public class OrdenesActivity extends AppCompatActivity {
                 busquedaRecyclerView();
                 return true;
             case 3:
-                if (ordenesArrayList.get(item.getGroupId()).getStatus_id() == 0) {
-                    Intent intent = new Intent(OrdenesActivity.this, EditarOrdenActivity.class);
-                    intent.putExtra("cliente", db.clientesDao().getClienteById(ordenesArrayList.get(item.getGroupId()).getCustomer_id()));
-                    intent.putExtra("orden", ordenesArrayList.get(item.getGroupId()));
-                    startActivityForResult(intent, RequesEdit);
-                } else {
-                    Toast.makeText(this, "La orden no puede ser editada", Toast.LENGTH_SHORT).show();
+                ClientesDao clientesDao= db.clientesDao();
+                if(clientesDao.getClienteById(ordenesArrayList.get(item.getGroupId()).getCustomer_id()).getStatus()==0){
+
+                    final AlertDialog.Builder dia= new AlertDialog.Builder(getApplicationContext());
+                    dia.setTitle("Usuario inactivo");
+                    dia.setMessage("Por cuestiones de mal uso de cuenta, el cliente esta actualmente en estado inactivo");
+                    dia.setPositiveButton("Ok :(", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                         dialog.dismiss();
+                        }
+                    });
+                    dia.show();
                 }
+                else {
+                    if (ordenesArrayList.get(item.getGroupId()).getStatus_id() == 0) {
+                        Intent intent = new Intent(OrdenesActivity.this, EditarOrdenActivity.class);
+                        intent.putExtra("cliente", db.clientesDao().getClienteById(ordenesArrayList.get(item.getGroupId()).getCustomer_id()));
+                        intent.putExtra("orden", ordenesArrayList.get(item.getGroupId()));
+                        startActivityForResult(intent, RequesEdit);
+                    } else {
+                        Toast.makeText(this, "La orden no puede ser editada", Toast.LENGTH_SHORT).show();
+                    }
 
-
+                }
                 return true;
             default:
                 return super.onContextItemSelected(item);

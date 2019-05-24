@@ -34,11 +34,21 @@ public class Clientes implements Serializable {
     @ColumnInfo(name = "e_mail")
     private String email;
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    @ColumnInfo(name = "status")
+    private int status;
 
 
 
 
-    public Clientes(int id, String first_name, String last_name, String direccion, String phone1, String phone2, String phone3, String email) {
+    public Clientes(int id, String first_name, String last_name, String direccion, String phone1, String phone2, String phone3, String email, int status) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -47,7 +57,7 @@ public class Clientes implements Serializable {
         this.phone2 = phone2;
         this.phone3 = phone3;
         this.email = email;
-
+        this.status= status;
     }
 
     public int getId() {

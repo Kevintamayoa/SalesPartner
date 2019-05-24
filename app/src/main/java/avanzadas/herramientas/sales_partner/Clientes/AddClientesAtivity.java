@@ -195,7 +195,7 @@ public class AddClientesAtivity extends AppCompatActivity {
 
             saveData();
 
-            c = new Clientes(clientesList.size() + 1, f_name, l_name, dir, tel1, tel2, tel3, email);
+            c = new Clientes(clientesList.size() + 1, f_name, l_name, dir, tel1, tel2, tel3, email,1);
 
             clientesDao.InsertClientes(c);
 
