@@ -261,8 +261,9 @@ public class ClientesActivity extends AppCompatActivity  {
                                 String id5 = person.getString("phone2");
                                 String id6 = person.getString("phone3");
                                 String id7 = person.getString("e_mail");
+                                int id8 = person.getInt("state");
 
-                                clientes.add(new Clientes(id,id1,id2,id3,id4,id5,id6,id7));
+                                clientes.add(new Clientes(id,id1,id2,id3,id4,id5,id6,id7,id8));
                                 //Dao.InsertClientes(new Clientes(id,id1,id2,id3,id4,id5,id6,id7));
 
                             }
