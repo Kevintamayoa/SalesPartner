@@ -58,7 +58,6 @@ public interface ClientesDao {
     public List<Clientes> getAllClientesByDir(String dir);
 
 
-
     @RawQuery(observedEntities = Clientes.class)
     List<Clientes> getAllClientesFindDinamyc(SupportSQLiteQuery query);
 

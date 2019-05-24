@@ -5,4 +5,5 @@
     <string name="title_activity_clientes">ClientesActivity</string>
     <string name="title_activity_ordenes">OrdenesActivity</string>
     <string name="title_activity_reportes">ReportesActivity</string>
+    <string name="invalid_post" />
 </resources>

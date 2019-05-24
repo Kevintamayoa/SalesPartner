@@ -45,7 +45,7 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
     AdapterAddOrder.ViewHolder viewHolder;
     Ordenes orden;
     ViewModelAddOrden model;
-
+    int ids=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,25 +211,36 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
         for(OrdenesEnsambles oe:db.ordenesensamblesDao().getAllOrdenesEnsambles()){
             a.add(oe.getA());
         }
-        for(int i=0;i<db.ordenesensamblesDao().getAllOrdenesEnsambles().size()+2;i++){
+        for(int i=0;i<db.ordenesensamblesDao().getAllOrdenesEnsambles().size()+15;i++){
             if(!a.contains(i)){
                 ause.add(i);
+                //ause es la lista de ids que puede tener ordenesAssemblies
             }
         }
+
     for(int i=0;i<ensamblesList.size();i++){
+
+        if(i==0){
+            ids=db.orderDao().getAllOrdenesByDate().size();
+            db.orderDao().InsrtOrdenes(new Ordenes(ids,0,spinner.getSelectedItemPosition(),fecha,""));
+            //Aqui mando al servidor la orden ^
+        }
+
         viewHolder=(AdapterAddOrder.ViewHolder)rc.findViewHolderForAdapterPosition(i);
 
         view=viewHolder.itemView;
-        int id=db.orderDao().getAllOrdenesByDate().size();
+
         TextView tv= (TextView) view.findViewById(R.id.cantidad_ensambles_add);
-        db.orderDao().InsrtOrdenes(new Ordenes(id,0,spinner.getSelectedItemPosition(),fecha,""));
 
 
+//
         db.ordenesensamblesDao().InsertOrdenesEnsamble(new OrdenesEnsambles(
-                ause.get(i),id,ensamblesList.get(i).getId(),Integer.parseInt(tv.getText().toString())
-        ));
+                ause.get(i),ids,ensamblesList.get(i).getId(),Integer.parseInt(tv.getText().toString())));
+        //Aqui mando al servidor los ordenes asambles ^
     }
 
     }
+
+
 
 }

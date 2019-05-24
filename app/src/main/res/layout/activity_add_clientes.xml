@@ -45,23 +45,7 @@
         android:maxLength="10"
 
         app:met_mask="###-#######" />
-    <EditText
-        android:id="@+id/userName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:digits="abcdefghijklmnopqrstuvwxyz'ABCDEFGHIJKLMNOPQRSTUWXYZ1234567890"
-
-        android:hint="*Nombre de usuario" />
-
-    <EditText
-        android:id="@+id/claveUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:digits="abcdefghijklmnopqrstuvwxyz'ABCDEFGHIJKLMNOPQRSTUWXYZ1234567890"
-
-        android:hint="*Contraseña" />
+   android:hint="*Contraseña" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

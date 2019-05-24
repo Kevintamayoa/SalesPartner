@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.JsonReader;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,8 +21,11 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.facebook.stetho.Stetho;
 
+import java.util.List;
 import java.util.zip.Inflater;
 
 import avanzadas.herramientas.sales_partner.Clientes.Clientes;
@@ -29,6 +33,7 @@ import avanzadas.herramientas.sales_partner.Clientes.ClientesActivity;
 import avanzadas.herramientas.sales_partner.Clientes.ClientesDao;
 import avanzadas.herramientas.sales_partner.Ensambles.EnsamblesActivity;
 import avanzadas.herramientas.sales_partner.Ordenes.OrdenesActivity;
+import avanzadas.herramientas.sales_partner.Ordenes.OrdenesDao;
 import avanzadas.herramientas.sales_partner.Productos.ProductosActivity;
 import avanzadas.herramientas.sales_partner.Reportes.ReportesActivity;
 import avanzadas.herramientas.sales_partner.Vendedores.Vendedores;
@@ -46,6 +51,7 @@ public class MenuActivity extends AppCompatActivity{
     private LinearLayout linearActivity;
     private final int requestcode=11;
     private Vendedores vendedor;
+    private OrdenesDao ordenesDao;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -84,9 +90,9 @@ public class MenuActivity extends AppCompatActivity{
 
 
         AppDataBase db = AppDataBase.getAppDataBase(getApplicationContext());
-
-
-
+        ordenesDao = db.orderDao();
+        //RequestQueue rq;
+        //JsonObjectRequest jor;
         productosImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

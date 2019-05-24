@@ -10,10 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 
 import com.facebook.stetho.Stetho;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import avanzadas.herramientas.sales_partner.Clientes.Clientes;
@@ -40,6 +45,10 @@ public class MainActivity extends AppCompatActivity{
 
         Stetho.initializeWithDefaults(this);
         AppDataBase db = AppDataBase.getAppDataBase(getApplicationContext());
+
+
+
+
         vendedoresDao = db.vendedoresDao();
        Vendedores vendedor= null;
         List<Vendedores> vendedoresList= vendedoresDao.getAllVendedores();
