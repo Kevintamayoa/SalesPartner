@@ -64,13 +64,13 @@ public class MenuActivity extends AppCompatActivity{
 
     private static final int DURATION_ANIMATION = 380;
     private static String TAG = MainActivity.class.getSimpleName();
-    private String urlproducts = "http://192.168.43.235:3000/products";
+    private String urlproducts = "http://192.168.0.9:3000/products";
    // private String urlproductscategorys = "http://192.168.0.12:3000/productcategories";
-    private String urlAssemblies = "http://192.168.43.235:3000/assemblies";
-    private String urlAssembliesProducts = "http://192.168.43.235:3000/assemblyproducts";
-    private String urlOrdenes = "http://192.168.43.235:3000/orders";
-    private String urlOrdenesAssemblies = "http://192.168.43.235:3000/orderassemblies";
-    private String urlClientes = "http://192.168.43.235:3000/customers";
+    private String urlAssemblies = "http://192.168.0.9:3000/assemblies";
+    private String urlAssembliesProducts = "http://192.168.0.9:3000/assemblyproducts";
+    private String urlOrdenes = "http://192.168.0.9:3000/orders";
+    private String urlOrdenesAssemblies = "http://192.168.0.9:3000/orderassemblies";
+    private String urlClientes = "http://192.168.0.9:3000/customers";
 
     private static String KEY_SUCCESS = "success";
     private static String KEY_USERID = "userid";
@@ -82,7 +82,7 @@ public class MenuActivity extends AppCompatActivity{
                         Log.d(TAG, response.toString());
                         try {
                             ProductosDao productosDao = db.productosDao();
-                            if(productosDao.getAllProductos()==null){
+                            if(productosDao.getAllProductos()==null||productosDao.getAllProductos().size()==0){
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject person = (JSONObject) response.get(i);
                                 int id = person.getInt("id");
@@ -172,7 +172,7 @@ public class MenuActivity extends AppCompatActivity{
                         Log.d(TAG, response.toString());
                         try {
                             EnsamblesDao ensamblesDao = db.ensamblesDao();
-                            if(ensamblesDao.getAllEnsambles()==null) {
+                            if(ensamblesDao.getAllEnsambles()==null||ensamblesDao.getAllEnsambles().size()==0) {
                                 for (int i = 0; i < response.length(); i++) {
                                     JSONObject person = (JSONObject) response.get(i);
                                     int id = person.getInt("id");
@@ -216,7 +216,7 @@ public class MenuActivity extends AppCompatActivity{
                         Log.d(TAG, response.toString());
                         try {
                             ProductosEnsamblesDao Dao = db.enamblesProductsDao();
-                            if(Dao.getAllAssemblyProducts()==null) {
+                            if(Dao.getAllAssemblyProducts()==null||Dao.getAllAssemblyProducts().size()==0) {
                                 for (int i = 0; i < response.length(); i++) {
                                     JSONObject person = (JSONObject) response.get(i);
                                     int a = person.getInt("a");
