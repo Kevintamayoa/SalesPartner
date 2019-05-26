@@ -103,7 +103,12 @@ public class AdapterOrdenes extends RecyclerView.Adapter<AdapterOrdenes.ViewHold
 
             nombre.setText(clientesDao.getClienteById(ordenes.getCustomer_id()).getFirst_name()+" "+
                     clientesDao.getClienteById(ordenes.getCustomer_id()).getLast_name());
-            status.setText(statusOrdenesDao.getStatusByid(ordenes.getStatus_id()).getDescription());
+            if((statusOrdenesDao.getStatusByid(ordenes.getStatus_id()).getDescription().isEmpty()))
+            {
+                status.setText("0");
+            }else {
+                status.setText(statusOrdenesDao.getStatusByid(ordenes.getStatus_id()).getDescription());
+            }
             cantidad_ordenes.setText("Cantidad de ensambles: "+ ordenesEnsamblesDao.getCantidadDeEnsamblesByOrder(ordenes.getId()).size());
             costo_ordenes.setText("Costo total de ordenen: "+ productosDao.IngresosById(ordenes.getId()));
 

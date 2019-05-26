@@ -64,13 +64,14 @@ public class MenuActivity extends AppCompatActivity{
 
     private static final int DURATION_ANIMATION = 380;
     private static String TAG = MainActivity.class.getSimpleName();
-    private String urlproducts = "http://192.168.0.9:3000/products";
-   // private String urlproductscategorys = "http://192.168.0.12:3000/productcategories";
-    private String urlAssemblies = "http://192.168.0.9:3000/assemblies";
-    private String urlAssembliesProducts = "http://192.168.0.9:3000/assemblyproducts";
-    private String urlOrdenes = "http://192.168.0.9:3000/orders";
-    private String urlOrdenesAssemblies = "http://192.168.0.9:3000/orderassemblies";
-    private String urlClientes = "http://192.168.0.9:3000/customers";
+    String ip = "http://192.168.8.103";
+    String urlproducts = ip+":3000/products";
+
+    String urlAssemblies = ip+":3000/assemblies";
+    String urlAssembliesProducts = ip+":3000/assemblyproducts";
+    String urlOrdenes = ip+":3000/orders";
+    String urlOrdenesAssemblies = ip+":3000/orderassemblies";
+    String urlClientes = ip+":3000/customers";
 
     private static String KEY_SUCCESS = "success";
     private static String KEY_USERID = "userid";
@@ -407,8 +408,7 @@ public class MenuActivity extends AppCompatActivity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"No se pudo cargar la información a la aplicación", Toast.LENGTH_SHORT).show();
 
             }
         });

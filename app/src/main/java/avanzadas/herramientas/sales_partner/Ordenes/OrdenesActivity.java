@@ -70,8 +70,9 @@ public class OrdenesActivity extends AppCompatActivity {
     private CheckBox fechafinal;
     private Calendar calendar;
     public List<Ordenes> ordenesfinal = new ArrayList<>();
-    private String urlOrdenesAssemblies = "http://192.168.43.235:3000/orderassemblies";
-    private String urlOrdenes = "http://192.168.43.235:3000/orders";
+    private String ip = "http://192.168.8.103";
+    private String urlOrdenesAssemblies = ip+":3000/orderassemblies";
+    private String urlOrdenes = ip+":3000/orders";
     private static String TAG = OrdenesActivity.class.getSimpleName();
 
     private MaskEditText TvfechaInicial;

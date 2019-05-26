@@ -43,7 +43,8 @@ public class ClientesActivity extends AppCompatActivity  {
     private EditText BuscarEditText;
     private RecyclerView recyclerView;
     ClientesDao clientesDao;
-    private String urlClientes = "http://192.168.43.235:3000/customers";
+    String ip = "http://192.168.8.103";
+    private String urlClientes = ip+":3000/customers";
     private static String TAG = ClientesActivity.class.getSimpleName();
     List<Clientes> clientesList;
 

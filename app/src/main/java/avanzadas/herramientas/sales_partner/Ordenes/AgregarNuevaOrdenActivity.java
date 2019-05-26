@@ -237,31 +237,24 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
         for (int i = 0; i < ensamblesList.size(); i++) {
 
             if (i == 0) {
-                ids = db.orderDao().getAllOrdenesByDate().size();
+                ids = db.orderDao().getAllOrdenesByDate().size()+1;
                 customer_id = String.valueOf(spinner.getSelectedItemPosition());
                 db.orderDao().InsrtOrdenes(new Ordenes(ids, 0, spinner.getSelectedItemPosition(), fecha, ""));
                 //Aqui mando al servidor la orden ^
 
-                String url = "192.168.43.235:3000/orders/add";
+                String url = "http://192.168.8.103:3000/orders/add/id="+ids+"&status_id=0&customer_id="+spinner.getSelectedItemPosition()+"&date="+fecha+"&change_log=vacio";
 
 
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (response.trim().equalsIgnoreCase("registra")) {
-
-                            Toast.makeText(getApplicationContext(), "Se ha registrado con exito", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "No se ha registrado ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Se ha agregado a la base de datos", Toast.LENGTH_SHORT).show();
                             Log.i("RESPUESTA: ", "" + response);
-                        }
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.e("Error: ", error.getMessage());
-                        Toast.makeText(getApplicationContext(), "No se ha podido conectar", Toast.LENGTH_SHORT).show();
-
                     }
                 }) {
 
