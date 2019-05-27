@@ -64,18 +64,13 @@ public class MenuActivity extends AppCompatActivity{
 
     private static final int DURATION_ANIMATION = 380;
     private static String TAG = MainActivity.class.getSimpleName();
-    String ip = "http://192.168.8.103";
-    String urlproducts = ip+":3000/products";
-
-    String urlAssemblies = ip+":3000/assemblies";
-    String urlAssembliesProducts = ip+":3000/assemblyproducts";
-    String urlOrdenes = ip+":3000/orders";
-    String urlOrdenesAssemblies = ip+":3000/orderassemblies";
-    String urlClientes = ip+":3000/customers";
 
     private static String KEY_SUCCESS = "success";
     private static String KEY_USERID = "userid";
-    private void makeJsonArrayRequestProductos(final List<Productos> productoslocales) {
+    private void makeJsonArrayRequestProductos(final List<Productos> productoslocales, String ip) {
+
+        String urlproducts = ip+":3000/products";
+
         JsonArrayRequest req = new JsonArrayRequest(urlproducts,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -123,7 +118,8 @@ public class MenuActivity extends AppCompatActivity{
 
     }
 
-    private void makeJsonArrayRequestEnsambles(final List<Ensambles> ensambleslocales) {
+    private void makeJsonArrayRequestEnsambles(final List<Ensambles> ensambleslocales, String ip) {
+        String urlAssemblies = ip+":3000/assemblies";
         JsonArrayRequest req = new JsonArrayRequest(urlAssemblies,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -167,7 +163,8 @@ public class MenuActivity extends AppCompatActivity{
 
 
     }
-    private void makeJsonArrayRequestEnsamblesProducts(final List<EnsamblesProducts> locales) {
+    private void makeJsonArrayRequestEnsamblesProducts(final List<EnsamblesProducts> locales,String ip) {
+        String urlAssembliesProducts = ip+":3000/assemblyproducts";
         JsonArrayRequest req = new JsonArrayRequest(urlAssembliesProducts,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -213,7 +210,9 @@ public class MenuActivity extends AppCompatActivity{
 
 
     }
-    private void makeJsonArrayRequestClientes(final List<Clientes> locales) {
+    private void makeJsonArrayRequestClientes(final List<Clientes> locales,String ip) {
+
+        String urlClientes = ip+":3000/customers";
         JsonArrayRequest req = new JsonArrayRequest(urlClientes,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -270,7 +269,8 @@ public class MenuActivity extends AppCompatActivity{
 
 
     }
-    private void makeJsonArrayRequestOrders(final List<Ordenes> locales) {
+    private void makeJsonArrayRequestOrders(final List<Ordenes> locales, String ip) {
+        String urlOrdenes = ip+":3000/orders";
         JsonArrayRequest req = new JsonArrayRequest(urlOrdenes,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -326,7 +326,8 @@ public class MenuActivity extends AppCompatActivity{
 
 
     }
-    private void makeJsonArrayRequestOrdersAssembly(final List<OrdenesEnsambles> locales) {
+    private void makeJsonArrayRequestOrdersAssembly(final List<OrdenesEnsambles> locales, String ip) {
+        String urlOrdenesAssemblies = ip+":3000/orderassemblies";
         JsonArrayRequest req = new JsonArrayRequest(urlOrdenesAssemblies,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -410,6 +411,8 @@ public class MenuActivity extends AppCompatActivity{
         Stetho.initializeWithDefaults(this);
         findView();
 
+        String ip = getString(R.string.ip);
+
         getSupportActionBar().setTitle("Sales Partner");
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
         getSupportActionBar().setIcon(R.mipmap.icono2_round);
@@ -423,7 +426,7 @@ public class MenuActivity extends AppCompatActivity{
          db = AppDataBase.getAppDataBase(getApplicationContext());
         ProductosDao productosDao = db.productosDao();
         List<Productos> productoslocales=productosDao.getAllProductos();
-        makeJsonArrayRequestProductos(productoslocales);
+        makeJsonArrayRequestProductos(productoslocales,ip);
 
      //   ProductsCategoryDao productsCategoryDao = db.productsCategoryDao();
      //   List<ProductCategory> productCategories=productsCategoryDao.getAllCategory();
@@ -431,23 +434,23 @@ public class MenuActivity extends AppCompatActivity{
 
         EnsamblesDao ensamblesDao = db.ensamblesDao();
         List<Ensambles> ensambles=ensamblesDao.getAllEnsambles();
-        makeJsonArrayRequestEnsambles(ensambles);
+        makeJsonArrayRequestEnsambles(ensambles,ip);
 
         ProductosEnsamblesDao productosEnsamblesDao = db.enamblesProductsDao();
         List<EnsamblesProducts> ensamblesProducts=productosEnsamblesDao.getAllAssemblyProducts();
-        makeJsonArrayRequestEnsamblesProducts(ensamblesProducts);
+        makeJsonArrayRequestEnsamblesProducts(ensamblesProducts,ip);
 
         ClientesDao clientesDao = db.clientesDao();
         List<Clientes> clientes=clientesDao.getAllClientes();
-        makeJsonArrayRequestClientes(clientes);
+        makeJsonArrayRequestClientes(clientes,ip);
 
         OrdenesDao ordenesDao = db.orderDao();
         List<Ordenes> ordeneslocales=ordenesDao.getAllOrdenes();
-        makeJsonArrayRequestOrders(ordeneslocales);
+        makeJsonArrayRequestOrders(ordeneslocales,ip);
 
         OrdenesEnsamblesDao ordenesEnsamblesDao = db.ordenesensamblesDao();
         List<OrdenesEnsambles> ordenesEnsambles=ordenesEnsamblesDao.getAllOrdenesEnsambles();
-        makeJsonArrayRequestOrdersAssembly(ordenesEnsambles);
+        makeJsonArrayRequestOrdersAssembly(ordenesEnsambles,ip);
         ordenesDao = db.orderDao();
         //RequestQueue rq;
         //JsonObjectRequest jor;

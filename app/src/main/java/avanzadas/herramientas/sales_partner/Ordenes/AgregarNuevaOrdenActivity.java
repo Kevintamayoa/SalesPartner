@@ -62,12 +62,15 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
     int ids = 0;
     String customer_id;
 
+    String ip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_nueva_orden);
 
         getSupportActionBar().setTitle("Nueva Orden");
+
+        ip = getString(R.string.ip);
 
         db = AppDataBase.getAppDataBase(getApplicationContext());
         model = ViewModelProviders.of(AgregarNuevaOrdenActivity.this).get(ViewModelAddOrden.class);
@@ -242,7 +245,7 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
                 db.orderDao().InsrtOrdenes(new Ordenes(ids, 0, spinner.getSelectedItemPosition(), fecha, ""));
                 //Aqui mando al servidor la orden ^
 
-                String url = "http://192.168.8.103:3000/orders/add/id="+ids+"&status_id=0&customer_id="+spinner.getSelectedItemPosition()+"&date="+fecha+"&change_log=vacio";
+                String url = ip+":3000/orders/add/id="+ids+"&status_id=0&customer_id="+spinner.getSelectedItemPosition()+"&date="+fecha+"&change_log=vacio";
 
 
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {

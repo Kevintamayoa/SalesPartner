@@ -43,7 +43,7 @@ public class ClientesActivity extends AppCompatActivity  {
     private EditText BuscarEditText;
     private RecyclerView recyclerView;
     ClientesDao clientesDao;
-    private String urlClientes = "http://192.168.0.9:3000/customers";
+
     private static String TAG = ClientesActivity.class.getSimpleName();
     List<Clientes> clientesList;
 
@@ -126,13 +126,14 @@ public class ClientesActivity extends AppCompatActivity  {
     }
 
     public boolean onOptionsItemSelected(MenuItem menuItem) {
+        String ip = getString(R.string.ip);
         int id = menuItem.getItemId();
         if (id == R.id.AddButton) {
             Intent intent = new Intent(ClientesActivity.this, AddClientesAtivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.BuscarButton) {
-            makeJsonArrayRequestClientes();
+            makeJsonArrayRequestClientes(ip);
             //busquedaRecyclerView();
             return true;
         }
@@ -243,12 +244,12 @@ public class ClientesActivity extends AppCompatActivity  {
         BuscarEditText = findViewById(R.id.busquedaEditText);
         recyclerView = findViewById(R.id.recyclerView);
     }
-    private void makeJsonArrayRequestClientes() {
+    private void makeJsonArrayRequestClientes(String ip) {
         ClientesDao c= db.clientesDao();
         c.DeleteClientes(c.getAllClientes().get(0));
         c.DeleteClientes(c.getAllClientes().get(1));
         c.DeleteClientes(c.getAllClientes().get(2));
-
+        String urlClientes = ip+":3000/customers";
         JsonArrayRequest req = new JsonArrayRequest(urlClientes,
                 new Response.Listener<JSONArray>() {
                     @Override

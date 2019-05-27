@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CheckBox;
@@ -13,10 +14,19 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
 import com.santalu.maskedittext.MaskEditText;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import avanzadas.herramientas.sales_partner.AppController;
 import avanzadas.herramientas.sales_partner.AppDataBase;
 import avanzadas.herramientas.sales_partner.R;
 
@@ -196,8 +206,27 @@ public class AddClientesAtivity extends AppCompatActivity {
             saveData();
 
             c = new Clientes(clientesList.size() + 1, f_name, l_name, dir, tel1, tel2, tel3, email,1);
-
+            int ids = clientesList.size() + 1;
             clientesDao.InsertClientes(c);
+
+            String ip = getString(R.string.ip);
+            String url = ip+":3000/customers/add/id="+ids+"&f_name="+f_name+"&l_name="+l_name+"&tel1="+tel1+"&tel2="+tel2+"&tel3="+tel3+"&email="+email+"&status=1";
+
+
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Toast.makeText(getApplicationContext(), "Se ha agregado a la base de datos", Toast.LENGTH_SHORT).show();
+                    Log.i("RESPUESTA: ", "" + response);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    VolleyLog.e("Error: ", error.getMessage());
+                }
+            });
+            AppController.getInstance().addToRequestQueue(stringRequest);
+
 
 
             Toast.makeText(this, "Cliente Guardado, te toca comisión", Toast.LENGTH_SHORT).show();
