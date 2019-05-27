@@ -29,11 +29,7 @@ import avanzadas.herramientas.sales_partner.Vendedores.vendedoresDao;
 @Database(entities = {Productos.class, ProductCategory.class, Ensambles.class, EnsamblesProducts.class
         , Clientes.class, StatusOrdenes.class, Ordenes.class, OrdenesEnsambles.class, Vendedores.class}, version = 1, exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
-
-
     public static AppDataBase instance = null;
-
-
     public static AppDataBase getAppDataBase(Context context) {
 //instance=null;
         if (instance == null) {
@@ -315,23 +311,12 @@ public abstract class AppDataBase extends RoomDatabase {
         }
         return instance;
     }
-
     public abstract ProductosDao productosDao();
-
     public abstract vendedoresDao vendedoresDao();
-
     public abstract ProductsCategoryDao productsCategoryDao();
-
     public abstract EnsamblesDao ensamblesDao();
-
     public abstract ProductosEnsamblesDao enamblesProductsDao();
-
     public abstract ClientesDao clientesDao();
-
     public abstract StatusOrdenesDao statusorderDao();
-
     public abstract OrdenesDao orderDao();
-
-    public abstract OrdenesEnsamblesDao ordenesensamblesDao();
-
-}
+    public abstract OrdenesEnsamblesDao ordenesensamblesDao();}

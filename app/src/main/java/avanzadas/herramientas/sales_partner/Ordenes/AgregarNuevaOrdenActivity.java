@@ -242,15 +242,15 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
             if (i == 0) {
                 ids = db.orderDao().getAllOrdenesByDate().size()+1;
                 customer_id = String.valueOf(spinner.getSelectedItemPosition());
-                db.orderDao().InsrtOrdenes(new Ordenes(ids, 0, spinner.getSelectedItemPosition(), fecha, ""));
-                //Aqui mando al servidor la orden ^
 
-                String url = ip+":3000/orders/add/id="+ids+"&status_id=0&customer_id="+spinner.getSelectedItemPosition()+"&date="+fecha+"&change_log=vacio";
-
+    String url = ip+":3000/orders/add/id="+ids+"&status_id=0&customer_id="+spinner.getSelectedItemPosition()+"&date="+fecha+"&change_log=vacio";
 
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                        db.orderDao().InsrtOrdenes(new Ordenes(ids, 0, spinner.getSelectedItemPosition(), fecha, ""));
+                        //Aqui mando al servidor la orden ^
                             Toast.makeText(getApplicationContext(), "Se ha agregado a la base de datos", Toast.LENGTH_SHORT).show();
                             Log.i("RESPUESTA: ", "" + response);
                     }
@@ -258,6 +258,7 @@ public class AgregarNuevaOrdenActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         VolleyLog.e("Error: ", error.getMessage());
+                        return;
                     }
                 }) {
 

@@ -19,7 +19,8 @@ import avanzadas.herramientas.sales_partner.AppDataBase;
 import avanzadas.herramientas.sales_partner.Ensambles.Ensambles;
 import avanzadas.herramientas.sales_partner.R;
 
-public class AdapterEditOrdenes  extends RecyclerView.Adapter<AdapterEditOrdenes.ViewHolder> implements View.OnClickListener {
+public class
+AdapterEditOrdenes  extends RecyclerView.Adapter<AdapterEditOrdenes.ViewHolder> implements View.OnClickListener {
 
     public List<String> cantidades=new ArrayList<>();
     //

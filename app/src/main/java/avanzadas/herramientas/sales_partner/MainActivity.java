@@ -63,22 +63,18 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //if()
-
         setContentView(R.layout.activity_main);
 
         Stetho.initializeWithDefaults(this);
         AppDataBase db = AppDataBase.getAppDataBase(getApplicationContext());
+        List<Vendedores> vendedoresList= vendedoresDao.getAllVendedores();
 
         vendedoresDao = db.vendedoresDao();
-       Vendedores vendedor= null;
-        List<Vendedores> vendedoresList= vendedoresDao.getAllVendedores();
-        for(Vendedores v: vendedoresList){
-          if(v.getOnline()==1){
+        Vendedores vendedor= null;
+          for(Vendedores v: vendedoresList){
+            if(v.getOnline()==1){
               vendedor= v;
-          }
-
-        }
+          }}
         if(vendedor==null){
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -88,13 +84,8 @@ public class MainActivity extends AppCompatActivity{
             Intent intent = new Intent(MainActivity.this, MenuActivity.class);
             intent.putExtra("vendedor", vendedor);
             startActivity(intent);
-
             super.finish();
-
         }
-
-
-
     }
     private void restartApp() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
