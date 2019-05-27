@@ -157,7 +157,7 @@ public class EnsamblesActivity extends AppCompatActivity {
             ensamblesList = ensamblesdao.getAllEnsambles();
             //recyclerView.setAdapter(new EnsamblesAdapter(ensamblesdao.getAllEnsambles()));
         } else if (BuscarSpinner.getSelectedItem() != "Todas" && BuscarEditText.getText().toString() == "") {
-            ensamblesList = ensamblesdao.getEnsamblesByCategory(BuscarSpinner.getSelectedItemPosition() - 1);
+            ensamblesList.add(ensamblesdao.getEnsamblesByCategory(BuscarSpinner.getSelectedItemPosition() - 1));
             //recyclerView.setAdapter(new EnsamblesAdapter(ensamblesdao.getEnsamblesByCategory(BuscarSpinner.getSelectedItemPosition()-1)));
         } else if (BuscarSpinner.getSelectedItem() == "Todas" && BuscarEditText.getText().toString() != "") {
             ensamblesList = ensamblesdao.getEnsamblesByText("%" + BuscarEditText.getText().toString() + "%");

@@ -121,49 +121,7 @@ public class MenuActivity extends AppCompatActivity{
 
 
     }
- //   private void makeJsonArrayRequestProductCategories(final List<ProductCategory> locales) {
- //       JsonArrayRequest req = new JsonArrayRequest(urlproductscategorys,
- //               new Response.Listener<JSONArray>() {
- //                   @Override
- //                   public void onResponse(JSONArray response) {
- //                       Log.d(TAG, response.toString());
- //                       try {
- //                           ProductsCategoryDao Dao = db.productsCategoryDao();
- //                           for (int i = 0; i < response.length(); i++) {
- //                               JSONObject person = (JSONObject) response.get(i);
- //                               int id = person.getInt("id");
- //                               String desc = person.getString("description");
- //                               if(!locales.contains(new ProductCategory(id, desc))){
- //                                   Dao.insertProductCategoryId(new ProductCategory(id, desc));
- //                               }else{
- //                                   locales.remove(new ProductCategory(id,  desc));
- //                               }
- //                           }
- //                           for(ProductCategory obj :locales){
- //                               Dao.DeleteProductCategory(obj);
- //                           }
-//
- //                       } catch (JSONException e) {
- //                           e.printStackTrace();
- //                           Toast.makeText(getApplicationContext(),
- //                                   "Error: " + e.getMessage(),
- //                                   Toast.LENGTH_LONG).show();
- //                       }
-//
- //                   }
- //               }, new Response.ErrorListener() {
- //           @Override
- //           public void onErrorResponse(VolleyError error) {
- //               VolleyLog.d(TAG, "Error: " + error.getMessage());
- //               Toast.makeText(getApplicationContext(),
- //                       error.getMessage(), Toast.LENGTH_SHORT).show();
-//
- //           }
- //       });
- //       AppController.getInstance().addToRequestQueue(req);
-//
-//
- //   }
+
     private void makeJsonArrayRequestEnsambles(final List<Ensambles> ensambleslocales) {
         JsonArrayRequest req = new JsonArrayRequest(urlAssemblies,
                 new Response.Listener<JSONArray>() {

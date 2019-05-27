@@ -71,7 +71,7 @@ public class OrdenesActivity extends AppCompatActivity {
     private Calendar calendar;
     public List<Ordenes> ordenesfinal = new ArrayList<>();
     private String urlOrdenesAssemblies = "http://192.168.43.235:3000/orderassemblies";
-    private String urlOrdenes = "http://192.168.43.235:3000/orders";
+    private String urlOrdenes = "http://192.168.0.9:3000/orders";
     private static String TAG = OrdenesActivity.class.getSimpleName();
 
     private MaskEditText TvfechaInicial;
@@ -192,15 +192,11 @@ public class OrdenesActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AgregarNuevaOrdenActivity.class);
             startActivityForResult(intent, RequestAdd);
         } else if (id == R.id.BuscarButton) {
-            OrdenesDao ordenesDao=db.orderDao();
-            OrdenesEnsamblesDao ordenesEnsambles= db.ordenesensamblesDao();
 
+            makeJsonArrayRequestOrders();
 
-
-            makeJsonArrayRequestOrders(ordenesDao.getAllOrdenes());
-            makeJsonArrayRequestOrdersAssembly(ordenesEnsambles.getAllOrdenesEnsambles());
             ordenesfinal= new ArrayList<>();
-            busquedaRecyclerView();
+
         }
         return super.onOptionsItemSelected(menuItem);
     }
@@ -505,7 +501,8 @@ public class OrdenesActivity extends AppCompatActivity {
     }
 
 
-    private void makeJsonArrayRequestOrdersAssembly(final List<OrdenesEnsambles> locales) {
+    private void makeJsonArrayRequestOrdersAssembly() {
+
         JsonArrayRequest req = new JsonArrayRequest(urlOrdenesAssemblies,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -531,6 +528,7 @@ public class OrdenesActivity extends AppCompatActivity {
                                 for(OrdenesEnsambles c:ordenesEnsambles){
                                     Dao.InsertOrdenesEnsamble(c);
                                 }
+
                             }
 
                         } catch (JSONException e) {
@@ -554,7 +552,9 @@ public class OrdenesActivity extends AppCompatActivity {
 
 
     }
-    private void makeJsonArrayRequestOrders(final List<Ordenes> locales) {
+    private void makeJsonArrayRequestOrders() {
+        OrdenesDao d= db.orderDao();
+        makeJsonArrayRequestOrdersAssembly();
         JsonArrayRequest req = new JsonArrayRequest(urlOrdenes,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -584,7 +584,9 @@ public class OrdenesActivity extends AppCompatActivity {
                                 for(Ordenes c:ordenes){
                                     Dao.InsrtOrdenes(c);
                                 }
+
                             }
+                            busquedaRecyclerView();
                             //for(Ordenes obj :locales){
                             //    Dao.DeleteOrden(obj);
                             //}
@@ -594,6 +596,7 @@ public class OrdenesActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),
                                     "Error: " + e.getMessage(),
                                     Toast.LENGTH_LONG).show();
+                            busquedaRecyclerView();
                         }
 
                     }
@@ -603,6 +606,7 @@ public class OrdenesActivity extends AppCompatActivity {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
+                busquedaRecyclerView();
 
             }
         });
@@ -610,17 +614,5 @@ public class OrdenesActivity extends AppCompatActivity {
 
 
     }
-   // @Override
-   // protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-   //     if(requestCode==RequestAdd){
-   //
-   //
-   //     }
-   //
-   //
-   //
-   //
-   //
-   //     super.onActivityResult(requestCode, resultCode, data);
-   // }
+
 }

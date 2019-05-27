@@ -11,11 +11,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,9 +33,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import avanzadas.herramientas.sales_partner.AppController;
 import avanzadas.herramientas.sales_partner.AppDataBase;
 import avanzadas.herramientas.sales_partner.Clientes.Clientes;
 import avanzadas.herramientas.sales_partner.Ensambles.Ensambles;
+import avanzadas.herramientas.sales_partner.Ensambles.EnsamblesDao;
 import avanzadas.herramientas.sales_partner.R;
 
 public class EditarOrdenActivity extends AppCompatActivity {
@@ -42,6 +54,8 @@ public class EditarOrdenActivity extends AppCompatActivity {
     ViewModelEditOrden model;
     List<Ensambles> ensambleParaEliminar;
     List<Ensambles> ensamblesParaGuardar;
+    private String urlOrdenesAssemblies = "http://192.168.0.9:3000/orderassemblies";
+    private static String TAG = EditarOrdenActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +75,8 @@ public class EditarOrdenActivity extends AppCompatActivity {
         }
         FindView();
         clienteTV.setText(cliente.getFirst_name()+" "+cliente.getLast_name());
-        RecyclerView();
+        makeJsonArrayRequestOrdersAssembly();
+        //RecyclerView();
 
     }
 
@@ -157,6 +172,28 @@ public class EditarOrdenActivity extends AppCompatActivity {
         recyclerView=findViewById(R.id.recyclerView_edit);
     }
     public void RecyclerView(){
+        List<OrdenesEnsambles> oensambles = new ArrayList<>();
+        EnsamblesDao d= db.ensamblesDao();
+        List<Ensambles> a= new ArrayList<>();
+        if(model.getEnsamblesList()==null) {
+            ensamblesList= new ArrayList<>();
+            OrdenesEnsamblesDao dao= db.ordenesensamblesDao();
+            oensambles= dao.getAllOrdenesEnsambles();
+            for(OrdenesEnsambles o: oensambles){
+                if(o.getId()==orden.getId()) {
+                    ensamblesList.add(d.getEnsamblesByCategory(o.getAssembly_id()));
+                }
+            }
+
+        }
+        else{
+            ensamblesList=model.getEnsamblesList();}
+        adapterEditOrdenes= new AdapterEditOrdenes(ensamblesList,orden);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapterEditOrdenes);
+
+    }
+    public void RecyclerViewOff(){
         if(model.getEnsamblesList()==null) {
             ensamblesList = new ArrayList<>();
 
@@ -172,7 +209,6 @@ public class EditarOrdenActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapterEditOrdenes);
 
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
@@ -242,5 +278,63 @@ public class EditarOrdenActivity extends AppCompatActivity {
 
 
         // super.onBackPressed();
+    }
+    private void makeJsonArrayRequestOrdersAssembly() {
+    OrdenesEnsamblesDao d= db.ordenesensamblesDao();
+
+
+        JsonArrayRequest req = new JsonArrayRequest(urlOrdenesAssemblies,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        List<OrdenesEnsambles> ordenesEnsambles= new ArrayList<>();
+                        Log.d(TAG, response.toString());
+                        try {
+                            OrdenesEnsamblesDao Dao = db.ordenesensamblesDao();
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject person = (JSONObject) response.get(i);
+                                int a = person.getInt("a");
+                                int id = person.getInt("id");
+                                int id1 = person.getInt("assembly_id");
+                                int id2 = person.getInt("qty");
+
+                                ordenesEnsambles.add(new OrdenesEnsambles(a,id,id1,id2));
+
+                            }
+                            if(ordenesEnsambles!=Dao.getAllOrdenesEnsambles()){
+                                for(OrdenesEnsambles c: Dao.getAllOrdenesEnsambles()){
+                                    Dao.DeleatEnsamble(c);
+                                }
+                                for(OrdenesEnsambles c:ordenesEnsambles){
+                                    Dao.InsertOrdenesEnsamble(c);
+                                }
+
+                            }
+
+
+                            RecyclerView();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(),
+                                    "Error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                            RecyclerView();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d(TAG, "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+//RecyclerView();
+                RecyclerView();
+            }
+        });
+        AppController.getInstance().addToRequestQueue(req);
+
+
     }
 }

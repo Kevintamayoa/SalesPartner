@@ -20,7 +20,7 @@ public interface EnsamblesDao {
     public List<Ensambles> getAllEnsambles();
 
     @Query("select * from assemblies where id = :category")
-    public List<Ensambles> getEnsamblesByCategory(int category);
+    public Ensambles getEnsamblesByCategory(int category);
 
     @Query("select * from assemblies where description LIKE  :description")
     public List<Ensambles> getEnsamblesByText(String description);

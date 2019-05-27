@@ -43,9 +43,10 @@ public class ClientesActivity extends AppCompatActivity  {
     private EditText BuscarEditText;
     private RecyclerView recyclerView;
     ClientesDao clientesDao;
-    private String urlClientes = "http://192.168.43.235:3000/customers";
+    private String urlClientes = "http://192.168.0.9:3000/customers";
     private static String TAG = ClientesActivity.class.getSimpleName();
     List<Clientes> clientesList;
+
 
     ClientesAdapter adapter;
 
@@ -131,8 +132,8 @@ public class ClientesActivity extends AppCompatActivity  {
             startActivity(intent);
             return true;
         } else if (id == R.id.BuscarButton) {
-            makeJsonArrayRequestClientes(clientesDao.getAllClientes());
-            busquedaRecyclerView();
+            makeJsonArrayRequestClientes();
+            //busquedaRecyclerView();
             return true;
         }
         return super.onOptionsItemSelected(menuItem);
@@ -242,7 +243,12 @@ public class ClientesActivity extends AppCompatActivity  {
         BuscarEditText = findViewById(R.id.busquedaEditText);
         recyclerView = findViewById(R.id.recyclerView);
     }
-    private void makeJsonArrayRequestClientes(final List<Clientes> locales) {
+    private void makeJsonArrayRequestClientes() {
+        ClientesDao c= db.clientesDao();
+        c.DeleteClientes(c.getAllClientes().get(0));
+        c.DeleteClientes(c.getAllClientes().get(1));
+        c.DeleteClientes(c.getAllClientes().get(2));
+
         JsonArrayRequest req = new JsonArrayRequest(urlClientes,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -250,7 +256,8 @@ public class ClientesActivity extends AppCompatActivity  {
                         List<Clientes> clientes= new ArrayList<>();
                         Log.d(TAG, response.toString());
                         try {
-                            ClientesDao Dao = db.clientesDao();
+                            ClientesDao clDao = db.clientesDao();
+                            Toast.makeText(ClientesActivity.this, "si", Toast.LENGTH_SHORT).show();
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject person = (JSONObject) response.get(i);
                                 int id = person.getInt("id");
@@ -267,23 +274,32 @@ public class ClientesActivity extends AppCompatActivity  {
                                 //Dao.InsertClientes(new Clientes(id,id1,id2,id3,id4,id5,id6,id7));
 
                             }
-                            if(clientes!=Dao.getAllClientes()){
-                                for(Clientes c: Dao.getAllClientes()){
-                                    Dao.DeleteClientes(c);
+
+                            if(clientes!=clDao.getAllClientes()){
+                                for(Clientes c: clDao.getAllClientes()){
+                                    clDao.DeleteClientes(c);
+                                    ClientesDao clDao4 = db.clientesDao();
+                                    List<Clientes> l= clDao.getAllClientes();
+                                    int a;
+                                    a=2+2;
                                 }
                                 for(Clientes c:clientes){
-                                    Dao.InsertClientes(c);
+                                    clDao.InsertClientes(c);
+                                    ClientesDao clDao4 = db.clientesDao();
+                                    List<Clientes> l= clDao.getAllClientes();
+                                    int a;
+                                    a=2+2;
                                 }
+                                busquedaRecyclerView();
                             }
-                            // for(Clientes obj :locales){
-                            //     Dao.DeleteClientes(obj);
-                            // }
+
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(getApplicationContext(),
                                     "Error: " + e.getMessage(),
                                     Toast.LENGTH_LONG).show();
+                            busquedaRecyclerView();
                         }
 
                     }
@@ -293,9 +309,14 @@ public class ClientesActivity extends AppCompatActivity  {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         error.getMessage(), Toast.LENGTH_SHORT).show();
+                busquedaRecyclerView();
 
             }
         });
+        //if(req==null){}
+
+        ClientesDao clDao = db.clientesDao();
+        List<Clientes> l= clDao.getAllClientes();
         AppController.getInstance().addToRequestQueue(req);
 
 
